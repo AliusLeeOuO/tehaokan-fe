@@ -1,7 +1,4 @@
 import "./index.less"
-import homeIcon from "../../assets/images/nav/52shouye-1.svg"
-import likeIcon from "../../assets/images/nav/42pingjia-1.svg"
-import historyIcon from "../../assets/images/nav/43shijian.svg"
 import PeronIcon from "../../assets/images/nav/53gerenzhongxin-1.svg"
 import SettingsIcon from "../../assets/images/nav/4shezhi.svg"
 import LogoImage from "../../assets/images/header/header-logo.png"
@@ -10,11 +7,16 @@ import SearchIcon from "../../assets/images/header/58sousuo.svg"
 import CloseIcon from "../../assets/images/header/4guanbi-1.svg"
 import minimizeIcon from "../../assets/images/header/2zuixiaohua-1.svg"
 import maximizeIcon from "../../assets/images/header/3zuidahua-1.svg"
-import { Navigate, NavLink, Route, Routes } from "react-router-dom"
+import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
 import Movies from "../../views/movies"
 import Recommend from "../../views/recommend"
 import Series from "../../views/series"
 import Subscription from "../../views/subscription"
+import Favourites from "../../views/favourites"
+import History from "../../views/history"
+import HomeIcon from "./components/homeIcon.tsx"
+import LikeIcon from "./components/likeIcon.tsx"
+import HistoryIcon from "./components/historyIcon.tsx"
 
 export default function Layout() {
   const minimizeApp = () => {
@@ -28,29 +30,59 @@ export default function Layout() {
     window.ipcRenderer.send("close-window")
   }
 
+  // selector 与 search-item 是否显示
+  const location = useLocation()
+  // 定义不显示selector的路由列表
+  const hiddenRoutes = ["/favourites", "/history"]
+  // 检查当前路由是否在隐藏列表中
+  const showSelector = !hiddenRoutes.includes(location.pathname)
+
+  // 首页按钮active类
+  const currentPath = location.pathname
+
+  // 定义应该激活首页链接的路由列表
+  const homeActiveRoutes = [
+    "/index/recommend",
+    "/index/movies",
+    "/index/series",
+    "/index/subscription"
+  ]
+
+  // 检查当前路由是否应该激活首页链接
+  const isHomeActive = homeActiveRoutes.includes(currentPath) || currentPath === "/"
+
   return (
     <>
       <div className="layout">
         <nav>
           <div className="nav-items">
-            <div className="nav-item">
+            <NavLink
+              to="/"
+              className={isHomeActive ? "nav-item nav-item-active" : "nav-item"}
+            >
               <div className="nav-img">
-                <img src={homeIcon} alt="" />
+                <HomeIcon />
               </div>
               <span>首页</span>
-            </div>
-            <div className="nav-item">
+            </NavLink>
+            <NavLink
+              to="/favourites"
+              className={({ isActive }) => isActive ? "nav-item nav-item-active" : "nav-item"}
+            >
               <div className="nav-img">
-                <img src={likeIcon} alt="" />
+                <LikeIcon />
               </div>
               <span>收藏</span>
-            </div>
-            <div className="nav-item">
+            </NavLink>
+            <NavLink
+              to="/history"
+              className={({ isActive }) => isActive ? "nav-item nav-item-active" : "nav-item"}
+            >
               <div className="nav-img">
-                <img src={historyIcon} alt="" />
+                <HistoryIcon />
               </div>
               <span>历史</span>
-            </div>
+            </NavLink>
           </div>
           <div className="section-items">
             <div className="section-item">
@@ -68,30 +100,38 @@ export default function Layout() {
             <div className="logo">
               <img src={LogoImage} alt="" />
             </div>
-            <div className="selector">
-              <NavLink to="/recommend"
-                       className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
-                <span>推荐</span>
-              </NavLink>
-              <NavLink to="/movies"
-                       className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
-                <span>电影</span>
-              </NavLink>
-              <NavLink to="/series"
-                       className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
-                <span>剧集</span>
-              </NavLink>
-              <NavLink to="/subscription"
-                       className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
-                <span>追剧</span>
-              </NavLink>
-            </div>
-            <div className="search-item">
-              <div className="search-container">
-                <input type="text" placeholder="搜索" className="search-input" />
-                <img src={SearchIcon} alt="" className="search-icon" />
-              </div>
-            </div>
+            {
+              showSelector && (
+                <div className="selector">
+                  <NavLink to="/index/recommend"
+                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                    <span>推荐</span>
+                  </NavLink>
+                  <NavLink to="/index/movies"
+                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                    <span>电影</span>
+                  </NavLink>
+                  <NavLink to="/index/series"
+                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                    <span>剧集</span>
+                  </NavLink>
+                  <NavLink to="/index/subscription"
+                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                    <span>追剧</span>
+                  </NavLink>
+                </div>
+              )
+            }
+            {
+              showSelector && (
+                <div className="search-item">
+                  <div className="search-container">
+                    <input type="text" placeholder="搜索你喜欢的视频" className="search-input" />
+                    <img src={SearchIcon} alt="" className="search-icon" />
+                  </div>
+                </div>
+              )
+            }
             <div className="action-buttons">
               <div className="action-button" onClick={minimizeApp}>
                 <img src={minimizeIcon} alt="" />
@@ -106,11 +146,13 @@ export default function Layout() {
           </header>
           <main>
             <Routes>
-              <Route path="/recommend" element={<Recommend />} />
-              <Route path="/movies" element={<Movies />} />
-              <Route path="/series" element={<Series />} />
-              <Route path="/subscription" element={<Subscription />} />
-              <Route path="/" element={<Navigate replace to="/recommend" />} />
+              <Route path="/index/recommend" element={<Recommend />} />
+              <Route path="/index/movies" element={<Movies />} />
+              <Route path="/index/series" element={<Series />} />
+              <Route path="/index/subscription" element={<Subscription />} />
+              <Route path="/favourites" element={<Favourites />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/" element={<Navigate replace to="/index/recommend" />} />
             </Routes>
           </main>
         </div>

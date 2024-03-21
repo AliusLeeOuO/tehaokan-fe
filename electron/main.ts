@@ -20,7 +20,7 @@ const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"]
 
 function createWindow() {
   win = new BrowserWindow({
-    frame: false, // 隐藏窗口边框和控制按钮
+    // frame: false, // 隐藏窗口边框和控制按钮
     width: 1200, // 初始宽度
     height: 700, // 初始高度
     minWidth: 1200, // 最小宽度
@@ -31,7 +31,7 @@ function createWindow() {
     }
   })
 
-  win.setMenu(null) // 隐藏菜单栏
+  // win.setMenu(null) // 隐藏菜单栏
 
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
