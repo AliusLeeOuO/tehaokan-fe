@@ -1,7 +1,7 @@
 {
   "name": "tehaokan-fe",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
@@ -29,7 +29,8 @@
     "typescript": "^5.4.3",
     "vite": "^5.2.2",
     "vite-plugin-electron": "^0.28.4",
-    "vite-plugin-electron-renderer": "^0.14.5"
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "vite-plugin-html": "^3.2.2"
   },
   "main": "dist-electron/main.js",
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
