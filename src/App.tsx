@@ -1,12 +1,14 @@
-import "@arco-design/web-react/dist/css/arco.css";
+import "@arco-design/web-react/dist/css/arco.css"
 import Layout from "./components/layout"
-function App() {
-  // const [count, setCount] = useState(0)
+import { Route, Routes } from "react-router-dom"
+import Player from "./views/player"
 
+function App() {
   return (
-    <>
-      <Layout></Layout>
-    </>
+    <Routes>
+      <Route path="/player" element={<Player />} />
+      <Route path="*" element={<Layout />} />
+    </Routes>
   )
 }
 

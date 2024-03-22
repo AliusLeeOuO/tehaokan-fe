@@ -1,0 +1,49 @@
+@tab-height: 50px;
+
+.tab {
+  background-color: #1E2022;
+  height: @tab-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+
+  .resourceName {
+    font-size: 18px;
+    color: #E7E9EB;
+  }
+
+  .actionButtons {
+    display: flex;
+    place-items: center;
+    gap: 10px;
+
+    .actionButton {
+      -webkit-app-region: no-drag;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 18px;
+      height: 40px;
+      width: 40px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      transition: 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #2F3134;
+      }
+
+      svg {
+        height: 50%;
+        width: 50%;
+        fill: #E7E9EB;
+      }
+    }
+  }
+}
+
+.player {
+  background-color: #1E2022;
+  height: calc(100vh - @tab-height);
+}

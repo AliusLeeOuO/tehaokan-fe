@@ -4,9 +4,6 @@ import SettingsIcon from "../../assets/images/nav/4shezhi.svg"
 import LogoImage from "../../assets/images/header/header-logo.png"
 import SearchIcon from "../../assets/images/header/58sousuo.svg"
 
-import CloseIcon from "../../assets/images/header/4guanbi-1.svg"
-import minimizeIcon from "../../assets/images/header/2zuixiaohua-1.svg"
-import maximizeIcon from "../../assets/images/header/3zuidahua-1.svg"
 import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
 import Movies from "../../views/movies"
 import Recommend from "../../views/recommend"
@@ -14,9 +11,12 @@ import Series from "../../views/series"
 import Subscription from "../../views/subscription"
 import Favourites from "../../views/favourites"
 import History from "../../views/history"
-import HomeIcon from "./components/homeIcon.tsx"
-import LikeIcon from "./components/likeIcon.tsx"
-import HistoryIcon from "./components/historyIcon.tsx"
+import HomeIcon from "../icons/homeIcon.tsx"
+import LikeIcon from "../icons/likeIcon.tsx"
+import HistoryIcon from "../icons/historyIcon.tsx"
+import CloseIcon from "../icons/closeIcon.tsx"
+import MaximizeIcon from "../icons/maximizeIcon.tsx"
+import MinimizeIcon from "../icons/minimizeIcon.tsx"
 
 export default function Layout() {
   const minimizeApp = () => {
@@ -134,13 +134,13 @@ export default function Layout() {
             }
             <div className={style.actionButtons}>
               <div className={style.actionButton} onClick={minimizeApp}>
-                <img src={minimizeIcon} alt="" />
+                <MinimizeIcon />
               </div>
               <div className={style.actionButton} onClick={maximizeApp}>
-                <img src={maximizeIcon} alt="" />
+                <MaximizeIcon />
               </div>
               <div className={style.actionButton} onClick={closeApp}>
-                <img src={CloseIcon} alt="" />
+                <CloseIcon />
               </div>
             </div>
           </header>
