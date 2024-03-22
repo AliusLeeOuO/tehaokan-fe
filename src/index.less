@@ -1,8 +1,30 @@
+@import "./assets/css/variable.less";
+
+@font-face {
+  font-family: "HarmonyOS Sans";
+  src: url("./assets/fonts/HarmonyOS_Sans_Regular.ttf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "HarmonyOS Sans";
+  src: url("./assets/fonts/HarmonyOS_Sans_Bold.ttf");
+  font-weight: bold;
+}
+
+
 * {
   box-sizing: border-box;
+
+  ::selection {
+    background: @primary-color;
+    color: white;
+  }
 }
 
 html, body {
+  --primary-6: 49, 178, 187;
+  font-family: "HarmonyOS Sans", sans-serif;
   background-color: var(--color-bg-1);
   color: var(--color-text-1);
   color-scheme: dark; // 这个属性设置后，滚动条也能表现为暗色模式

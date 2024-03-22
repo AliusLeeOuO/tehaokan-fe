@@ -1,0 +1,40 @@
+@import "../../assets/css/variable.less";
+
+.movieBlock {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  .movieImg {
+    aspect-ratio: 11/15;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, .2);
+    transition: all .3s;
+    margin-bottom: 10px;
+
+    &:hover {
+      box-shadow: 0 0 16px rgba(0, 0, 0, .4);
+      transform: scale(1.02);
+    }
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .movieName {
+    font-family: "HarmonyOS Sans", sans-serif;
+    font-weight: bold;
+    transition: all .3s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+}

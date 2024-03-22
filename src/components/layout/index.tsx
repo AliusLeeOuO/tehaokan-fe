@@ -1,4 +1,4 @@
-import "./index.less"
+import style from "./index.module.less"
 import PeronIcon from "../../assets/images/nav/53gerenzhongxin-1.svg"
 import SettingsIcon from "../../assets/images/nav/4shezhi.svg"
 import LogoImage from "../../assets/images/header/header-logo.png"
@@ -53,70 +53,70 @@ export default function Layout() {
 
   return (
     <>
-      <div className="layout">
+      <div className={style.layout}>
         <nav>
-          <div className="nav-items">
+          <div className={style.navItems}>
             <NavLink
               to="/"
-              className={isHomeActive ? "nav-item nav-item-active" : "nav-item"}
+              className={isHomeActive ? `${style.navItem} ${style.navItemActive}` : style.navItem}
             >
-              <div className="nav-img">
+              <div className={style.navImg}>
                 <HomeIcon />
               </div>
               <span>首页</span>
             </NavLink>
             <NavLink
               to="/favourites"
-              className={({ isActive }) => isActive ? "nav-item nav-item-active" : "nav-item"}
+              className={({ isActive }) => isActive ? `${style.navItem} ${style.navItemActive}` : style.navItem}
             >
-              <div className="nav-img">
+              <div className={style.navImg}>
                 <LikeIcon />
               </div>
               <span>收藏</span>
             </NavLink>
             <NavLink
               to="/history"
-              className={({ isActive }) => isActive ? "nav-item nav-item-active" : "nav-item"}
+              className={({ isActive }) => isActive ? `${style.navItem} ${style.navItemActive}` : style.navItem}
             >
-              <div className="nav-img">
+              <div className={style.navImg}>
                 <HistoryIcon />
               </div>
               <span>历史</span>
             </NavLink>
           </div>
-          <div className="section-items">
-            <div className="section-item">
-              <div className="section-img">
+          <div className={style.sectionItems}>
+            <div className={style.sectionItem}>
+              <div className={style.sectionImg}>
                 <img src={PeronIcon} alt="" />
               </div>
-              <div className="section-img">
+              <div className={style.sectionImg}>
                 <img src={SettingsIcon} alt="" />
               </div>
             </div>
           </div>
         </nav>
-        <div className="layout-right">
+        <div className={style.layoutRight}>
           <header>
-            <div className="logo">
+            <div className={style.logo}>
               <img src={LogoImage} alt="" />
             </div>
             {
               showSelector && (
-                <div className="selector">
+                <div className={style.selector}>
                   <NavLink to="/index/recommend"
-                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                           className={({ isActive }) => isActive ? `${style.selectorItem} ${style.selectorItemActive}` : `${style.selectorItem}`}>
                     <span>推荐</span>
                   </NavLink>
                   <NavLink to="/index/movies"
-                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                           className={({ isActive }) => isActive ? `${style.selectorItem} ${style.selectorItemActive}` : `${style.selectorItem}`}>
                     <span>电影</span>
                   </NavLink>
                   <NavLink to="/index/series"
-                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                           className={({ isActive }) => isActive ? `${style.selectorItem} ${style.selectorItemActive}` : `${style.selectorItem}`}>
                     <span>剧集</span>
                   </NavLink>
                   <NavLink to="/index/subscription"
-                           className={({ isActive }) => isActive ? "selector-item selector-item-active" : "selector-item"}>
+                           className={({ isActive }) => isActive ? `${style.selectorItem} ${style.selectorItemActive}` : `${style.selectorItem}`}>
                     <span>追剧</span>
                   </NavLink>
                 </div>
@@ -124,22 +124,22 @@ export default function Layout() {
             }
             {
               showSelector && (
-                <div className="search-item">
-                  <div className="search-container">
-                    <input type="text" placeholder="搜索你喜欢的视频" className="search-input" />
-                    <img src={SearchIcon} alt="" className="search-icon" />
+                <div className={style.searchItem}>
+                  <div className={style.searchContainer}>
+                    <input type="text" placeholder="搜索你喜欢的视频" className={style.searchInput} />
+                    <img src={SearchIcon} alt="" className={style.searchIcon} />
                   </div>
                 </div>
               )
             }
-            <div className="action-buttons">
-              <div className="action-button" onClick={minimizeApp}>
+            <div className={style.actionButtons}>
+              <div className={style.actionButton} onClick={minimizeApp}>
                 <img src={minimizeIcon} alt="" />
               </div>
-              <div className="action-button" onClick={maximizeApp}>
+              <div className={style.actionButton} onClick={maximizeApp}>
                 <img src={maximizeIcon} alt="" />
               </div>
-              <div className="action-button" onClick={closeApp}>
+              <div className={style.actionButton} onClick={closeApp}>
                 <img src={CloseIcon} alt="" />
               </div>
             </div>

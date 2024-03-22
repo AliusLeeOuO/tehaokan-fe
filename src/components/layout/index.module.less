@@ -1,3 +1,6 @@
+@import "../../assets/css/variable.less";
+@header-height: 100px;
+
 .layout {
   display: flex;
 
@@ -9,9 +12,9 @@
     display: flex;
     flex-direction: column;
     padding: 40px 0;
-    background-color: #F6F7F8;
+    background-color: #f1f1f1;
 
-    .nav-items {
+    .navItems {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -19,7 +22,7 @@
       align-items: center;
       gap: 50px;
 
-      .nav-item {
+      .navItem {
         -webkit-app-region: no-drag;
         cursor: pointer;
         width: 60%;
@@ -31,27 +34,27 @@
         transition: 0.2s linear;
 
         &:hover {
-          color: #31b2bb;
+          color: @primary-color;
 
-          .nav-img {
+          .navImg {
             svg {
-              fill: #31b2bb;
+              fill: @primary-color;
             }
           }
         }
 
-        &.nav-item-active {
+        &.navItemActive {
           font-weight: bold;
-          color: #31b2bb;
+          color: @primary-color;
 
-          .nav-img {
+          .navImg {
             svg {
-              fill: #31b2bb;
+              fill: @primary-color;
             }
           }
         }
 
-        .nav-img {
+        .navImg {
           width: 45%;
 
           svg {
@@ -62,12 +65,12 @@
       }
     }
 
-    .section-items {
+    .sectionItems {
       display: flex;
       flex-direction: column;
       align-items: center;
 
-      .section-item {
+      .sectionItem {
         -webkit-app-region: no-drag;
         width: 60%;
         display: flex;
@@ -76,7 +79,7 @@
         cursor: pointer;
         gap: 30px;
 
-        .section-img {
+        .sectionImg {
           width: 45%;
 
           img {
@@ -87,15 +90,15 @@
     }
   }
 
-  .layout-right {
+  .layoutRight {
     flex: 1;
 
     header {
-      border-bottom: 2px solid #F6F7F8;
+      border-bottom: 2px solid #F1F1F1;
       padding: 0 40px;
       display: flex;
       justify-content: space-between;
-      height: 100px;
+      height: @header-height;
       gap: 40px;
       -webkit-app-region: drag;
 
@@ -115,7 +118,7 @@
         gap: 40px;
         font-size: 18px;
 
-        .selector-item {
+        .selectorItem {
           -webkit-app-region: no-drag;
           cursor: pointer;
           position: relative;
@@ -125,15 +128,15 @@
           transition: 0.2s ease-in-out;
 
           &:hover {
-            color: #31b2bb;
+            color: @primary-color;
           }
 
-          &.selector-item-active {
+          &.selectorItemActive {
             font-weight: bold;
-            color: #31b2bb;
+            color: @primary-color;
 
             &::before {
-              background-color: #31b2bb;
+              background-color: @primary-color;
             }
           }
 
@@ -152,13 +155,13 @@
         }
       }
 
-      .search-item {
+      .searchItem {
         flex: 1;
         display: flex;
         place-items: center;
         width: 100%;
 
-        .search-container {
+        .searchContainer {
           -webkit-app-region: no-drag;
           margin: 0 auto;
           max-width: 400px;
@@ -170,7 +173,7 @@
           padding: 0 20px;
           border-radius: 10px;
 
-          .search-input {
+          .searchInput {
             flex: 1;
             background-color: transparent;
             border: none;
@@ -179,19 +182,19 @@
             font-size: 16px;
           }
 
-          .search-icon {
+          .searchIcon {
             cursor: pointer;
             height: 45%;
           }
         }
       }
 
-      .action-buttons {
+      .actionButtons {
         display: flex;
         place-items: center;
         gap: 10px;
 
-        .action-button {
+        .actionButton {
           -webkit-app-region: no-drag;
           background-color: #fff;
           border-radius: 9999px;
@@ -213,6 +216,34 @@
             width: 50%;
           }
         }
+      }
+    }
+
+    main {
+      overflow-y: auto;
+      height: calc(100vh - @header-height);
+      background-color: #f9f9f9;
+      /* 整个滚动条 */
+      &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      /* 滚动条轨道 */
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+      }
+
+      /* 滚动条上的滑块 */
+      &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+      }
+
+      /* 当鼠标悬停在滚动条上时，滑块的样式 */
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
       }
     }
   }
