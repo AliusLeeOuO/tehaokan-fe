@@ -94,7 +94,7 @@ ipcMain.on("close-window", () => {
 
 // 监听渲染进程发来的消息来打开新窗口
 ipcMain.on("open-player-window", (_event, arg) => {
-  const { type, resourceId } = arg; // 从 arg 中解构出新参数
+  const { type, resourceId } = arg // 从 arg 中解构出新参数
 
   let playerWindowURL
   if (VITE_DEV_SERVER_URL) {

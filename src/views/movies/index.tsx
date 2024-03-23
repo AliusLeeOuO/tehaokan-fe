@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import usePublicApi, { imDBResponseDataContent } from "../../xhr/publicApi.ts"
 import MoviesBlock from "../../components/moviesBlock"
 import style from "./index.module.less"
-import { Spin } from "@arco-design/web-react"
+import PublicLoading from "../../components/publicLoading"
 
 export default function Movies() {
   const [movieList, setMovieList] = useState<imDBResponseDataContent[]>([])
@@ -32,9 +32,7 @@ export default function Movies() {
         {movieList.map(item => {
           return <MoviesBlock key={item.id} movieName={item.name} imgPath={item.poster_url} />
         })}
-      </div> : <div className={style.movieListSpin}>
-        <Spin size={40} />
-      </div>
+      </div> : <PublicLoading />
     }
   </>
 }

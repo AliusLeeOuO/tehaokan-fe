@@ -5,18 +5,21 @@ import LogoImage from "../../assets/images/header/header-logo.png"
 import SearchIcon from "../../assets/images/header/58sousuo.svg"
 
 import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
-import Movies from "../../views/movies"
-import Recommend from "../../views/recommend"
-import Series from "../../views/series"
-import Subscription from "../../views/subscription"
-import Favourites from "../../views/favourites"
-import History from "../../views/history"
 import HomeIcon from "../icons/homeIcon.tsx"
 import LikeIcon from "../icons/likeIcon.tsx"
 import HistoryIcon from "../icons/historyIcon.tsx"
 import CloseIcon from "../icons/closeIcon.tsx"
 import MaximizeIcon from "../icons/maximizeIcon.tsx"
 import MinimizeIcon from "../icons/minimizeIcon.tsx"
+import { lazy, Suspense } from "react"
+import PublicLoading from "../publicLoading"
+
+const Movies = lazy(() => import("../../views/movies"))
+const Recommend = lazy(() => import("../../views/recommend"))
+const Series = lazy(() => import("../../views/series"))
+const Subscription = lazy(() => import("../../views/subscription"))
+const Favourites = lazy(() => import("../../views/favourites"))
+const History = lazy(() => import("../../views/history"))
 
 export default function Layout() {
   const minimizeApp = () => {
@@ -145,15 +148,17 @@ export default function Layout() {
             </div>
           </header>
           <main>
-            <Routes>
-              <Route path="/index/recommend" element={<Recommend />} />
-              <Route path="/index/movies" element={<Movies />} />
-              <Route path="/index/series" element={<Series />} />
-              <Route path="/index/subscription" element={<Subscription />} />
-              <Route path="/favourites" element={<Favourites />} />
-              <Route path="/history" element={<History />} />
-              <Route path="/" element={<Navigate replace to="/index/recommend" />} />
-            </Routes>
+            <Suspense fallback={<PublicLoading />}>
+              <Routes>
+                <Route path="/index/recommend" element={<Recommend />} />
+                <Route path="/index/movies" element={<Movies />} />
+                <Route path="/index/series" element={<Series />} />
+                <Route path="/index/subscription" element={<Subscription />} />
+                <Route path="/favourites" element={<Favourites />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/" element={<Navigate replace to="/index/recommend" />} />
+              </Routes>
+            </Suspense>
           </main>
         </div>
       </div>

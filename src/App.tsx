@@ -1,14 +1,20 @@
 import "@arco-design/web-react/dist/css/arco.css"
-import Layout from "./components/layout"
+import { lazy, Suspense } from "react"
 import { Route, Routes } from "react-router-dom"
-import Player from "./views/player"
+import PublicLoading from "./components/publicLoading"
+
+const Player = lazy(() => import("./views/player"))
+const Layout = lazy(() => import("./components/layout"))
+
 
 function App() {
   return (
-    <Routes>
-      <Route path="/player" element={<Player />} />
-      <Route path="*" element={<Layout />} />
-    </Routes>
+    <Suspense fallback={<PublicLoading />}>
+      <Routes>
+        <Route path="/player" element={<Player />} />
+        <Route path="*" element={<Layout />} />
+      </Routes>
+    </Suspense>
   )
 }
 
