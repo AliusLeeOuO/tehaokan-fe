@@ -12,10 +12,8 @@ interface ChildProps {
 const ChildComponent: FC<ChildProps> = (props) => {
   const openPlayerWindow = () => {
     window.ipcRenderer.send("open-player-window", {
-      url: "http://your-second-page-url.html", // 或者是本地文件路径
-      width: 500,
-      height: 400,
-      options: { /* 更多BrowserWindow配置 */ }
+      type: "movie",
+      resourceId: 123456,
     })
   }
 

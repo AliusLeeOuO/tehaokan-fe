@@ -1,7 +1,22 @@
-import { ipcRenderer, contextBridge } from 'electron'
+import { ipcRenderer, contextBridge } from "electron"
+
+// 解析通过 'additionalArguments' 传递的自定义数据
+const parseCustomArgs = () => {
+  const args = process.argv
+  const customArgs: { [key: string]: string } = {}
+  args.forEach(arg => {
+    if (arg.includes("=")) {
+      const [key, value] = arg.split("=")
+      customArgs[key] = decodeURIComponent(value)
+    }
+  })
+  return customArgs
+}
+const { type, resourceId } = parseCustomArgs()
 
 // --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld('ipcRenderer', {
+contextBridge.exposeInMainWorld("ipcRenderer", {
+  // IPC 通信方法
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args
     ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
@@ -18,7 +33,9 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     ipcRenderer.invoke(channel, ...omit)
   },
-
   // You can expose other APTs you need here.
   // ...
+  // 获取从主进程传递的数据
+  getType: () => type,
+  getResourceId: () => resourceId
 })

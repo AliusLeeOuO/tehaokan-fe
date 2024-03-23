@@ -21,7 +21,15 @@ declare namespace NodeJS {
   }
 }
 
-// Used in Renderer process, expose in `preload.ts`
+// 用于渲染进程，通过 `preload.ts` 暴露
 interface Window {
-  ipcRenderer: import('electron').IpcRenderer
+  ipcRenderer: {
+    on: (...args: Parameters<import("electron").IpcRenderer["on"]>) => void;
+    off: (...args: Parameters<import("electron").IpcRenderer["off"]>) => void;
+    send: (...args: Parameters<import("electron").IpcRenderer["send"]>) => void;
+    invoke: (...args: Parameters<import("electron").IpcRenderer["invoke"]>) => Promise<any>;
+    getType: () => "movie" | "tv" | "";
+    getResourceId: () => number;
+    // 如果你暴露了更多方法，可以在这里继续添加...
+  }
 }

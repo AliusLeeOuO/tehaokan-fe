@@ -94,13 +94,15 @@ ipcMain.on("close-window", () => {
 
 // 监听渲染进程发来的消息来打开新窗口
 ipcMain.on("open-player-window", (_event, arg) => {
+  const { type, resourceId } = arg; // 从 arg 中解构出新参数
+
   let playerWindowURL
   if (VITE_DEV_SERVER_URL) {
     // 开发环境：使用Vite开发服务器的URL，并附加路由路径
     playerWindowURL = `${VITE_DEV_SERVER_URL}player`
   } else {
-    // 生产环境：加载本地文件，并通过hash路由（如果使用了）或其他机制来处理路由
-    playerWindowURL = `file://${path.join(process.env.DIST, "index.html")}` // 如果使用hash路由，可以是 #/player
+    // 生产环境
+    playerWindowURL = `file://${path.join(process.env.DIST, "index.html")}`
   }
 
   const secondWindow = new BrowserWindow({
@@ -110,7 +112,9 @@ ipcMain.on("open-player-window", (_event, arg) => {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
-      enableRemoteModule: false
+      enableRemoteModule: false,
+      // 添加 additionalArguments 传递自定义数据
+      additionalArguments: [`type=${type}`, `resourceId=${resourceId}`]
     },
     ...arg.options
   })
