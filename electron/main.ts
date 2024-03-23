@@ -99,7 +99,7 @@ ipcMain.on("open-player-window", (_event, arg) => {
   let playerWindowURL
   if (VITE_DEV_SERVER_URL) {
     // 开发环境：使用Vite开发服务器的URL，并附加路由路径
-    playerWindowURL = `${VITE_DEV_SERVER_URL}player`
+    playerWindowURL = `${VITE_DEV_SERVER_URL}#/player`
   } else {
     // 生产环境
     playerWindowURL = `file://${path.join(process.env.DIST, "index.html")}`
