@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import usePublicApi, { seriesResponseDataContent } from "../../xhr/publicApi.ts"
 import MoviesBlock from "../../components/moviesBlock"
-import { Spin } from "@arco-design/web-react"
+import PublicLoading from "../../components/publicLoading"
 import style from "./index.module.less"
 
 export default function Series() {
@@ -32,9 +32,7 @@ export default function Series() {
         {movieList.map(item => {
           return <MoviesBlock key={item.id} movieName={item.series_name} imgPath={item.poster_url} />
         })}
-      </div> : <div className={style.seriesListSpin}>
-        <Spin size={40} />
-      </div>
+      </div> : <PublicLoading />
     }
   </>
 }

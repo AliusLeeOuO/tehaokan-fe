@@ -15,21 +15,48 @@
     box-shadow: 0 0 12px rgba(0, 0, 0, .2);
     transition: all .3s;
     margin-bottom: 10px;
+    position: relative;
 
     &:hover {
       box-shadow: 0 0 16px rgba(0, 0, 0, .4);
       transform: scale(1.02);
     }
 
-    img {
-      object-fit: cover;
+    .skeleton, .canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
+      transition: 0.2s ease-in-out;
+    }
+
+    .canvasActive {
+      opacity: 1;
+      z-index: inherit;
+      user-select: inherit;
+    }
+
+    .canvasInactive {
+      opacity: 0;
+      z-index: -1;
+      user-select: none;
+    }
+
+    .skeletonActive {
+      opacity: 1;
+      z-index: inherit;
+      user-select: inherit;
+    }
+
+    .skeletonInactive {
+      opacity: 0;
+      z-index: -1;
+      user-select: none;
     }
   }
 
   .movieName {
-    font-family: "HarmonyOS Sans", sans-serif;
     font-weight: bold;
     transition: all .3s;
 

@@ -1,5 +1,4 @@
 import style from "./index.module.less"
-import PeronIcon from "../../assets/images/nav/53gerenzhongxin-1.svg"
 import SettingsIcon from "../../assets/images/nav/4shezhi.svg"
 import LogoImage from "../../assets/images/header/header-logo.png"
 import SearchIcon from "../../assets/images/header/58sousuo.svg"
@@ -89,9 +88,6 @@ export default function Layout() {
           </div>
           <div className={style.sectionItems}>
             <div className={style.sectionItem}>
-              <div className={style.sectionImg}>
-                <img src={PeronIcon} alt="" />
-              </div>
               <div className={style.sectionImg}>
                 <img src={SettingsIcon} alt="" />
               </div>

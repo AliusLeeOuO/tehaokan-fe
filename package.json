@@ -15,12 +15,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "sqlite3": "^5.1.7",
     "xgplayer": "^3.0.14"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
     "@types/qs": "^6.9.14",
-    "@types/react": "^18.2.67",
+    "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "electron": "^29.1.5",
@@ -28,7 +29,7 @@
     "less": "^4.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.3",
-    "vite": "^5.2.3",
+    "vite": "^5.2.5",
     "vite-plugin-electron": "^0.28.4",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-html": "^3.2.2"

@@ -26,7 +26,7 @@ function createWindow() {
     height: 750, // 初始高度
     minWidth: 1200, // 最小宽度
     minHeight: 600, // 最小高度
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, "app-logo.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js")
     }
@@ -106,8 +106,10 @@ ipcMain.on("open-player-window", (_event, arg) => {
   }
 
   const secondWindow = new BrowserWindow({
-    width: arg.width || 400,
-    height: arg.height || 300,
+    width: 1000,
+    height: 600,
+    minWidth: 800,
+    minHeight: 500,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
