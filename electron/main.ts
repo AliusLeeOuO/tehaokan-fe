@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron"
 import path from "node:path"
+import { getSqlite3 } from './better-sqlite3'
 
 // The built directory structure
 //
@@ -124,4 +125,8 @@ ipcMain.on("open-player-window", (_event, arg) => {
   secondWindow.loadURL(playerWindowURL)
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+  const db = getSqlite3()
+  win?.webContents.send('main-process-message', `[better-sqlite3] ${JSON.stringify(db.pragma('journal_mode = WAL'))}`)
+})
