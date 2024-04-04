@@ -28,6 +28,7 @@ interface Window {
     off: (...args: Parameters<import("electron").IpcRenderer["off"]>) => void;
     send: (...args: Parameters<import("electron").IpcRenderer["send"]>) => void;
     invoke: (...args: Parameters<import("electron").IpcRenderer["invoke"]>) => Promise<any>;
+    removeAllListeners: (...args: Parameters<import("electron").IpcRenderer["removeAllListeners"]>) => void;
     getType: () => "movie" | "tv" | "";
     getResourceId: () => number;
     // 如果你暴露了更多方法，可以在这里继续添加...

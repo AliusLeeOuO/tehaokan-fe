@@ -30,7 +30,7 @@ export default function Movies() {
     {
       isLoaded ? <div className={style.movieList}>
         {movieList.map(item => {
-          return <MoviesBlock key={item.id} movieName={item.name} imgPath={item.poster_url} />
+          return <MoviesBlock key={item.id} movieName={item.name} imgPath={item.poster_url}  resourceId={item.id} resourceType="movie"/>
         })}
       </div> : <PublicLoading />
     }

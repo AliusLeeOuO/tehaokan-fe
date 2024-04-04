@@ -47,4 +47,31 @@
 .player {
   background-color: #1E2022;
   height: calc(100vh - @tab-height);
+  width: 100%;
+  display: flex;
+
+  .playerContainer {
+
+  }
+
+  .playList {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    &.playListActive {
+      flex-basis: 35%;
+    }
+
+    .playListTitle {
+      font-size: 18px;
+      padding: 10px;
+    }
+    .playListContent {
+      flex: 1;
+      overflow-y: auto;
+      > div {
+        padding: 10px;
+      }
+    }
+  }
 }

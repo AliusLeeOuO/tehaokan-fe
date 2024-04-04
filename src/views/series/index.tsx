@@ -30,7 +30,7 @@ export default function Series() {
     {
       isLoaded ? <div className={style.seriesList}>
         {movieList.map(item => {
-          return <MoviesBlock key={item.id} movieName={item.series_name} imgPath={item.poster_url} />
+          return <MoviesBlock key={item.id} movieName={item.series_name} imgPath={item.poster_url}  resourceId={item.id} resourceType="tv"/>
         })}
       </div> : <PublicLoading />
     }

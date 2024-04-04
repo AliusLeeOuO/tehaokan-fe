@@ -30,7 +30,7 @@ export default function Recommend() {
     {
       isLoaded ? <div className={style.recommendList}>
         {recommended.map(item => {
-          return <MoviesBlock key={item.name} movieName={item.name} imgPath={item.poster_url} />
+          return <MoviesBlock key={item.name} movieName={item.name} imgPath={item.poster_url}  resourceId={item.id} resourceType={item.type}/>
         })}
       </div> : <PublicLoading />
     }

@@ -3,18 +3,24 @@ import { Skeleton } from "@arco-design/web-react"
 import { useRef } from "react"
 import style from "./index.module.less"
 import "./index.override.less"
+import usePublicApi from "../../xhr/publicApi.ts"
 
 interface ChildProps {
-  movieName: string
-  imgPath: string
   resourceId: number
   resourceType: "movie" | "tv"
 }
 
 
 const ChildComponent: FC<ChildProps> = (props) => {
+  const { getMovieInfoById, getTvInfoById } = usePublicApi()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isImgLoaded, setIsImgLoaded] = useState(false)
+
+  const [resourceInfo, setResourceInfo] = useState({
+    movieName: "",
+    imgPath: ""
+  })
+
   const openPlayerWindow = () => {
     window.ipcRenderer.send("open-player-window", {
       type: props.resourceType,
@@ -27,9 +33,25 @@ const ChildComponent: FC<ChildProps> = (props) => {
     window.ipcRenderer.send("insert-history", props.resourceType, props.resourceId)
   }
 
-  useEffect(() => {
+  const fetchResourceInfo = async () => {
+    if (props.resourceType === "movie") {
+      const response = await getMovieInfoById(props.resourceId)
+      setResourceInfo({
+        movieName: response.data.name,
+        imgPath: response.data.poster_url
+      })
+    } else if (props.resourceType === "tv") {
+      const response = await getTvInfoById(props.resourceId)
+      setResourceInfo({
+        movieName: response.data.series_name,
+        imgPath: response.data.poster_url
+      })
+    }
+  }
+
+  function loadImage() {
     const img = new Image()
-    img.src = props.imgPath
+    img.src = resourceInfo.imgPath
     img.onload = () => {
       setIsImgLoaded(true) // 图像加载完成
       const canvas = canvasRef.current
@@ -45,7 +67,19 @@ const ChildComponent: FC<ChildProps> = (props) => {
         }
       }
     }
-  }, [props.imgPath])
+  }
+
+  useEffect(() => {
+    fetchResourceInfo()
+  }, [])
+
+  useEffect(() => {
+    if (resourceInfo.imgPath) {
+      loadImage()
+    }
+    // 这个 useEffect 依赖于 resourceInfo.imgPath，
+    // 每当 imgPath 更新时，都会调用 loadImage
+  }, [resourceInfo.imgPath])
 
 
   return (
@@ -68,7 +102,7 @@ const ChildComponent: FC<ChildProps> = (props) => {
           className={`${isImgLoaded ? `${style.canvasActive} ${style.canvas}` : `${style.canvasInactive} ${style.canvas}`}`}
         ></canvas>
       </div>
-      <div className={style.movieName}>{props.movieName}</div>
+      <div className={style.movieName}>{resourceInfo.movieName}</div>
     </div>
   )
 }

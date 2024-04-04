@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from "electron"
+import { ipcRenderer, contextBridge, ipcMain } from "electron"
 
 // 解析通过 'additionalArguments' 传递的自定义数据
 const parseCustomArgs = () => {
@@ -32,6 +32,10 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
     const [channel, ...omit] = args
     ipcRenderer.invoke(channel, ...omit)
+  },
+  removeAllListeners(...args: Parameters<typeof ipcRenderer.removeAllListeners>) {
+    const [channel] = args
+    ipcRenderer.removeAllListeners(channel)
   },
   // You can expose other APTs you need here.
   // ...
