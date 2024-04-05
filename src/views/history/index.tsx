@@ -14,39 +14,56 @@ interface HistoryItem {
 const History: React.FC = () => {
   const [history, setHistory] = useState<HistoryItem[]>([])
 
-  useEffect(() => {
+
+  const fetchHistory = () => {
     const handleQueryHistoryReply = (_event: any, historyData: HistoryItem[]) => {
       setHistory(historyData)
     }
-
+    // 移除之前的监听器
+    window.ipcRenderer.off("query-history-reply", handleQueryHistoryReply)
     // 请求历史记录数据
     window.ipcRenderer.send("query-history")
     // 监听响应
     window.ipcRenderer.on("query-history-reply", handleQueryHistoryReply)
+  }
 
+  useEffect(() => {
+    fetchHistory()
     // 组件卸载时移除监听器
     return () => {
       window.ipcRenderer.removeAllListeners("query-history-reply")
     }
   }, [])
 
-  const historyByMonth = useMemo(() => {
+  const historyByDate = useMemo(() => {
     return history.reduce((acc: { [key: string]: HistoryItem[] }, item: HistoryItem) => {
-      const month = dayjs(item.gmt_create).format("YYYY-MM") // 使用dayjs格式化日期
-      if (!acc[month]) {
-        acc[month] = []
+      const today = dayjs()
+      const yesterday = dayjs().subtract(1, "day")
+      let label
+
+      const itemDate = dayjs(item.gmt_create)
+      if (itemDate.isSame(today, "day")) {
+        label = "今天"
+      } else if (itemDate.isSame(yesterday, "day")) {
+        label = "昨天"
+      } else {
+        label = itemDate.format("YYYY-MM-DD")
       }
-      acc[month].push(item)
+
+      if (!acc[label]) {
+        acc[label] = []
+      }
+      acc[label].push(item)
       return acc
     }, {})
   }, [history])
 
   return (
     <>
-      <div>
-        {Object.entries(historyByMonth).map(([month, items]) => (
-          <div key={month}>
-            <h2 className={style.historyMonth}>{month}</h2>
+      <div className={style.historyContainer}>
+        {Object.entries(historyByDate).map(([date, items]) => (
+          <div key={date}>
+            <div className={style.historyDate}>{date}</div>
             <div className={style.historyList}>
               {items.map((item: HistoryItem) => (
                 <HistoryBlock key={item.id} resourceId={item.resource_id} resourceType={item.resource_type} />

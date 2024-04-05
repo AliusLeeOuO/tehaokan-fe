@@ -1,4 +1,5 @@
 @import "../../assets/css/variable.less";
+
 @header-height: 100px;
 
 .layout {
@@ -81,9 +82,21 @@
 
         .sectionImg {
           width: 45%;
+          display: flex;
+          &.sectionImgActive {
+            svg {
+              fill: @primary-color;
+            }
+          }
 
-          img {
-            width: 100%;
+          svg {
+            transition: 0.2s linear;
+          }
+
+          &:hover {
+            svg {
+              fill: @primary-color;
+            }
           }
         }
       }
@@ -155,66 +168,79 @@
         }
       }
 
-      .searchItem {
+      .rightZone {
         flex: 1;
         display: flex;
-        place-items: center;
-        width: 100%;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 30px;
 
-        .searchContainer {
-          -webkit-app-region: no-drag;
-          margin: 0 auto;
-          max-width: 400px;
-          width: 100%;
-          height: 50%;
-          background-color: #F1F2F3;
+        .searchItem {
+          height: 100%;
           display: flex;
-          place-items: center;
-          padding: 0 20px;
-          border-radius: 10px;
+          justify-content: flex-end;
+          align-items: center;
+          width: 100%;
 
-          .searchInput {
-            flex: 1;
-            background-color: transparent;
-            border: none;
-            color: #000;
-            height: 100%;
-            font-size: 16px;
-          }
+          .searchContainer {
+            -webkit-app-region: no-drag;
+            max-width: 400px;
+            width: 100%;
+            height: 50%;
+            background-color: #F1F2F3;
+            display: flex;
+            place-items: center;
+            padding: 0 20px;
+            border-radius: 10px;
+            transition: 0.2s ease-in-out;
 
-          .searchIcon {
-            cursor: pointer;
-            height: 45%;
+            &:hover {
+              background-color: #E3E5E7;
+            }
+
+            .searchInput {
+              flex: 1;
+              background-color: transparent;
+              border: none;
+              color: #000;
+              height: 100%;
+              font-size: 16px;
+            }
+
+            .searchIcon {
+              cursor: pointer;
+              height: 45%;
+            }
           }
         }
-      }
 
-      .actionButtons {
-        display: flex;
-        place-items: center;
-        gap: 10px;
-
-        .actionButton {
-          -webkit-app-region: no-drag;
-          background-color: #fff;
-          border-radius: 9999px;
-          cursor: pointer;
-          font-size: 18px;
-          height: 40px;
-          width: 40px;
-          display: grid;
+        .actionButtons {
+          display: flex;
           place-items: center;
-          overflow: hidden;
-          transition: 0.2s ease-in-out;
+          gap: 10px;
 
-          &:hover {
-            background-color: #F1F2F3;
-          }
+          .actionButton {
+            -webkit-app-region: no-drag;
+            background-color: #fff;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-size: 18px;
+            height: 40px;
+            width: 40px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            transition: 0.2s ease-in-out;
 
-          svg {
-            height: 50%;
-            width: 50%;
-            fill: #616161;
+            &:hover {
+              background-color: #F1F2F3;
+            }
+
+            svg {
+              height: 50%;
+              width: 50%;
+              fill: #616161;
+            }
           }
         }
       }
@@ -225,24 +251,28 @@
       height: calc(100vh - @header-height);
       background-color: #f9f9f9;
       /* 整个滚动条 */
+
       &::-webkit-scrollbar {
         width: 10px;
         height: 10px;
       }
 
       /* 滚动条轨道 */
+
       &::-webkit-scrollbar-track {
         background: transparent;
         border-radius: 10px;
       }
 
       /* 滚动条上的滑块 */
+
       &::-webkit-scrollbar-thumb {
         background: #888;
         border-radius: 10px;
       }
 
       /* 当鼠标悬停在滚动条上时，滑块的样式 */
+
       &::-webkit-scrollbar-thumb:hover {
         background: #555;
       }

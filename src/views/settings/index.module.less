@@ -1,0 +1,57 @@
+.settingsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+  .settingsBox {
+    width: 100%;
+    max-width: 1400px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    &:not(:first-child) {
+      border-top: 1px solid #f1f1f1;
+    }
+
+    .settingsTitle {
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .settingsItem {
+      margin: 10px 0;
+
+      .itemTitle {
+        margin-bottom: 10px;
+      }
+
+      .radioStyle {
+        & > * {
+          line-height: 25px;
+        }
+
+        margin-bottom: 5px;
+      }
+
+      .settingsButton {
+        border-radius: 6px;
+        border: 1px solid #E3E5E7;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding: 10px;
+        transition: 0.3s ease;
+        margin-top: 10px;
+
+        &:hover {
+          background-color: #E3E5E7;
+        }
+
+        svg {
+          height: 20px;
+        }
+      }
+    }
+  }
+}

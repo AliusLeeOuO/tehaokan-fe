@@ -84,6 +84,17 @@ export function queryHistory(): { id: number, resourceType: string; resourceId: 
   }[]
 }
 
+//查询历史记录数量
+export function historyCount(): number {
+  const selectSQL = `
+      select COUNT(*) as count
+      from history
+  `
+  const stmt = database.prepare(selectSQL)
+  const result = stmt.get() as { count: number } // 执行 SQL 查询并获取结果
+  return result.count // 返回历史记录的数量
+}
+
 
 export function getSqlite3(filename = path.join(app.getPath("userData"), "better-sqlite3.sqlite3")) {
   if (!database) {

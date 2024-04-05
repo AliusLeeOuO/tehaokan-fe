@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron"
 import path from "node:path"
-import { getSqlite3, insertIntoHistory, queryHistory } from "./better-sqlite3"
+import { getSqlite3, historyCount, insertIntoHistory, queryHistory } from "./better-sqlite3"
 
 // The built directory structure
 //
@@ -132,6 +132,11 @@ ipcMain.on("insert-history", (_event, resourceType, resourceId) => {
 ipcMain.on("query-history", (event) => {
   const historyData = queryHistory() // 调用上面定义的函数获取历史记录数据
   event.reply("query-history-reply", historyData)
+})
+
+ipcMain.on("get-history-count", (event) => {
+  const count = historyCount()
+  event.reply("get-history-count-reply", count)
 })
 
 

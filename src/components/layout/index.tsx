@@ -1,5 +1,4 @@
 import style from "./index.module.less"
-import SettingsIcon from "../../assets/images/nav/4shezhi.svg"
 import LogoImage from "../../assets/images/header/header-logo.png"
 import SearchIcon from "../../assets/images/header/58sousuo.svg"
 
@@ -7,6 +6,7 @@ import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
 import HomeIcon from "../icons/homeIcon.tsx"
 import LikeIcon from "../icons/likeIcon.tsx"
 import HistoryIcon from "../icons/historyIcon.tsx"
+import SettingsIcon from "../icons/settingsIcon.tsx"
 import CloseIcon from "../icons/closeIcon.tsx"
 import MaximizeIcon from "../icons/maximizeIcon.tsx"
 import MinimizeIcon from "../icons/minimizeIcon.tsx"
@@ -19,6 +19,7 @@ const Series = lazy(() => import("../../views/series"))
 const Subscription = lazy(() => import("../../views/subscription"))
 const Favourites = lazy(() => import("../../views/favourites"))
 const History = lazy(() => import("../../views/history"))
+const Settings = lazy(() => import("../../views/settings"))
 
 export default function Layout() {
   const minimizeApp = () => {
@@ -35,7 +36,7 @@ export default function Layout() {
   // selector 与 search-item 是否显示
   const location = useLocation()
   // 定义不显示selector的路由列表
-  const hiddenRoutes = ["/favourites", "/history"]
+  const hiddenRoutes = ["/favourites", "/history", "/settings"]
   // 检查当前路由是否在隐藏列表中
   const showSelector = !hiddenRoutes.includes(location.pathname)
 
@@ -88,9 +89,9 @@ export default function Layout() {
           </div>
           <div className={style.sectionItems}>
             <div className={style.sectionItem}>
-              <div className={style.sectionImg}>
-                <img src={SettingsIcon} alt="" />
-              </div>
+              <NavLink to="/settings" className={({ isActive }) => isActive ? `${style.sectionImg} ${style.sectionImgActive}` : `${style.sectionImg}`}>
+                <SettingsIcon />
+              </NavLink>
             </div>
           </div>
         </nav>
@@ -121,25 +122,23 @@ export default function Layout() {
                 </div>
               )
             }
-            {
-              showSelector && (
-                <div className={style.searchItem}>
-                  <div className={style.searchContainer}>
-                    <input type="text" placeholder="搜索你喜欢的视频" className={style.searchInput} />
-                    <img src={SearchIcon} alt="" className={style.searchIcon} />
-                  </div>
+            <div className={style.rightZone}>
+              <div className={style.searchItem}>
+                <div className={style.searchContainer}>
+                  <input type="text" placeholder="搜索你喜欢的视频" className={style.searchInput} />
+                  <img src={SearchIcon} alt="" className={style.searchIcon} />
                 </div>
-              )
-            }
-            <div className={style.actionButtons}>
-              <div className={style.actionButton} onClick={minimizeApp}>
-                <MinimizeIcon />
               </div>
-              <div className={style.actionButton} onClick={maximizeApp}>
-                <MaximizeIcon />
-              </div>
-              <div className={style.actionButton} onClick={closeApp}>
-                <CloseIcon />
+              <div className={style.actionButtons}>
+                <div className={style.actionButton} onClick={minimizeApp}>
+                  <MinimizeIcon />
+                </div>
+                <div className={style.actionButton} onClick={maximizeApp}>
+                  <MaximizeIcon />
+                </div>
+                <div className={style.actionButton} onClick={closeApp}>
+                  <CloseIcon />
+                </div>
               </div>
             </div>
           </header>
@@ -152,6 +151,7 @@ export default function Layout() {
                 <Route path="/index/subscription" element={<Subscription />} />
                 <Route path="/favourites" element={<Favourites />} />
                 <Route path="/history" element={<History />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/" element={<Navigate replace to="/index/recommend" />} />
               </Routes>
             </Suspense>
