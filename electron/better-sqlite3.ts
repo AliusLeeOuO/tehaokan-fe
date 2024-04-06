@@ -7,16 +7,6 @@ const TAG = "[better-sqlite3]"
 let database: Database.Database
 
 function initializeDatabase(database: Database.Database): void {
-  // 创建用户表
-  const createTableSQL = `
-      CREATE TABLE IF NOT EXISTS users
-      (
-          id       INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT UNIQUE,
-          password TEXT
-      );
-  `
-  database.prepare(createTableSQL).run()
   // 创建历史记录表
   const createHistoryTableSQL = `
       CREATE TABLE IF NOT EXISTS history
@@ -30,15 +20,15 @@ function initializeDatabase(database: Database.Database): void {
   database.prepare(createHistoryTableSQL).run()
 
   // 检查是否已存在用户
-  const userExists = database.prepare("SELECT COUNT(*) AS count FROM users WHERE username = ?").get("root") as {
-    count: number
-  }
-  if (userExists.count === 0) {
-    // 插入初始用户
-    const insertUserSQL = `INSERT INTO users (username, password)
-                           VALUES (?, ?);`
-    database.prepare(insertUserSQL).run("root", "123456")
-  }
+  // const userExists = database.prepare("SELECT COUNT(*) AS count FROM users WHERE username = ?").get("root") as {
+  //   count: number
+  // }
+  // if (userExists.count === 0) {
+  //   // 插入初始用户
+  //   const insertUserSQL = `INSERT INTO users (username, password)
+  //                          VALUES (?, ?);`
+  //   database.prepare(insertUserSQL).run("root", "123456")
+  // }
 }
 
 export function insertIntoHistory(resourceType: "movie" | "tv", resourceId: number) {
@@ -93,6 +83,21 @@ export function historyCount(): number {
   const stmt = database.prepare(selectSQL)
   const result = stmt.get() as { count: number } // 执行 SQL 查询并获取结果
   return result.count // 返回历史记录的数量
+}
+
+export function dropHistory(): boolean {
+  try {
+    const query = `
+        DELETE
+        FROM history;
+    `
+    const stmt = database.prepare(query)
+    stmt.run() // 执行 DELETE 语句
+    return true // 如果没有错误发生，返回 true
+  } catch (error) {
+    console.error("Error deleting history records:", error)
+    return false // 如果有错误发生，捕获异常并返回 false
+  }
 }
 
 

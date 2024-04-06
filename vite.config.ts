@@ -1,12 +1,11 @@
 import {
   type Plugin,
-  defineConfig,
-  normalizePath
+  defineConfig
 } from "vite"
 import fs from "node:fs"
 import path from "node:path"
 import electron from "vite-plugin-electron/simple"
-import react from "@vitejs/plugin-react"
+import react from "@vitejs/plugin-react-swc"
 import { createHtmlPlugin } from "vite-plugin-html"
 
 // https://vitejs.dev/config/

@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from "electron"
 import path from "node:path"
-import { getSqlite3, historyCount, insertIntoHistory, queryHistory } from "./better-sqlite3"
+import { dropHistory, getSqlite3, historyCount, insertIntoHistory, queryHistory } from "./better-sqlite3"
+import tray from "./tray.ts"
 
 // The built directory structure
 //
@@ -22,16 +23,19 @@ const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"]
 
 function createWindow() {
   win = new BrowserWindow({
-    // frame: false, // 隐藏窗口边框和控制按钮
+    frame: false, // 隐藏窗口边框和控制按钮
     width: 1200, // 初始宽度
     height: 750, // 初始高度
     minWidth: 1200, // 最小宽度
     minHeight: 600, // 最小高度
     icon: path.join(process.env.VITE_PUBLIC, "app-logo.png"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.js")
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      contextIsolation: true
     }
   })
+  win.webContents.openDevTools({ mode: "detach" })
 
   // 添加主窗口关闭事件监听
   win.on("close", () => {
@@ -39,7 +43,7 @@ function createWindow() {
     app.quit()
   })
 
-  // win.setMenu(null) // 隐藏菜单栏
+  win.setMenu(null) // 隐藏菜单栏
 
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
@@ -52,6 +56,12 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(process.env.DIST, "index.html"))
   }
+
+  // 直接调用暴露出的tray函数
+  tray(win)
+  win.on("closed", () => {
+    win = null
+  })
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -90,7 +100,16 @@ ipcMain.on("maximize-window", () => {
 
 // 关闭窗口
 ipcMain.on("close-window", () => {
-  if (win) win.close()
+  if (win) {
+    win.close()
+  }
+})
+
+// 最小化到托盘
+ipcMain.on("minimize-to-tray", () => {
+  if (win) {
+    win.hide()
+  }
 })
 
 // 监听渲染进程发来的消息来打开新窗口
@@ -114,7 +133,7 @@ ipcMain.on("open-player-window", (_event, arg) => {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
-      nodeIntegration: false,
+      nodeIntegration: true,
       enableRemoteModule: false,
       // 添加 additionalArguments 传递自定义数据
       additionalArguments: [`type=${type}`, `resourceId=${resourceId}`]
@@ -125,18 +144,29 @@ ipcMain.on("open-player-window", (_event, arg) => {
   secondWindow.loadURL(playerWindowURL)
 })
 
+// 数据库操作
+
 ipcMain.on("insert-history", (_event, resourceType, resourceId) => {
   insertIntoHistory(resourceType, resourceId)
 })
 
 ipcMain.on("query-history", (event) => {
-  const historyData = queryHistory() // 调用上面定义的函数获取历史记录数据
+  const historyData = queryHistory()
   event.reply("query-history-reply", historyData)
 })
 
 ipcMain.on("get-history-count", (event) => {
   const count = historyCount()
   event.reply("get-history-count-reply", count)
+})
+
+ipcMain.on("drop-history-data", (event) => {
+  const result = dropHistory() // 调用函数删除所有历史记录
+  if (result) {
+    event.reply("drop-history-data-reply", "Success")
+    return
+  }
+  event.reply("drop-history-data-reply", "Failed")
 })
 
 

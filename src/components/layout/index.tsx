@@ -1,4 +1,5 @@
 import style from "./index.module.less"
+import "./index.override.less"
 import LogoImage from "../../assets/images/header/header-logo.png"
 import SearchIcon from "../../assets/images/header/58sousuo.svg"
 
@@ -10,8 +11,12 @@ import SettingsIcon from "../icons/settingsIcon.tsx"
 import CloseIcon from "../icons/closeIcon.tsx"
 import MaximizeIcon from "../icons/maximizeIcon.tsx"
 import MinimizeIcon from "../icons/minimizeIcon.tsx"
-import { lazy, Suspense } from "react"
+import { lazy, Suspense, useState } from "react"
 import PublicLoading from "../publicLoading"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../store/store.ts"
+import { Checkbox, Modal, Radio } from "@arco-design/web-react"
+import { setConfirmOnClose, setMinimizeToTray } from "../../store/settingsSlice.ts"
 
 const Movies = lazy(() => import("../../views/movies"))
 const Recommend = lazy(() => import("../../views/recommend"))
@@ -21,7 +26,23 @@ const Favourites = lazy(() => import("../../views/favourites"))
 const History = lazy(() => import("../../views/history"))
 const Settings = lazy(() => import("../../views/settings"))
 
+const RadioGroup = Radio.Group
+
 export default function Layout() {
+  const dispatch = useDispatch()
+  // 从 Redux state 读取 minimizeToTray 设置
+  const minimizeToTray = useSelector((state: RootState) => state.settings.minimizeToTray)
+  const confirmOnClose = useSelector((state: RootState) => state.settings.confirmOnClose)
+
+  const [visibleCloseModal, setVisibleCloseModal] = useState(false)
+  const handleExitSettingsChange = (value: string) => {
+    // 根据选中的值更新 minimizeToTray 设置
+    dispatch(setMinimizeToTray(value === "minimize"))
+  }
+  const handleExitConfirmOnCloseChange = (value: boolean) => {
+    dispatch(setConfirmOnClose(value))
+  }
+
   const minimizeApp = () => {
     window.ipcRenderer.send("minimize-window")
   }
@@ -30,7 +51,19 @@ export default function Layout() {
   }
 
   const closeApp = () => {
-    window.ipcRenderer.send("close-window")
+    if (confirmOnClose) {
+      setVisibleCloseModal(true)
+    } else {
+      conformCloseCallBack()
+    }
+  }
+  const conformCloseCallBack = () => {
+    if (minimizeToTray) {
+      setVisibleCloseModal(false)
+      window.ipcRenderer.send('minimize-to-tray')
+    } else {
+      window.ipcRenderer.send("close-window")
+    }
   }
 
   // selector 与 search-item 是否显示
@@ -89,7 +122,8 @@ export default function Layout() {
           </div>
           <div className={style.sectionItems}>
             <div className={style.sectionItem}>
-              <NavLink to="/settings" className={({ isActive }) => isActive ? `${style.sectionImg} ${style.sectionImgActive}` : `${style.sectionImg}`}>
+              <NavLink to="/settings"
+                       className={({ isActive }) => isActive ? `${style.sectionImg} ${style.sectionImgActive}` : `${style.sectionImg}`}>
                 <SettingsIcon />
               </NavLink>
             </div>
@@ -158,6 +192,38 @@ export default function Layout() {
           </main>
         </div>
       </div>
+      <Modal
+        title="点击关闭按钮后："
+        visible={visibleCloseModal}
+        simple={true}
+        closable={true}
+        onOk={conformCloseCallBack}
+        onCancel={() => setVisibleCloseModal(false)}
+        className="exitModal"
+      >
+        {/*<div>点击关闭按钮后：</div>*/}
+        <div>
+          <RadioGroup
+            direction="vertical"
+            value={minimizeToTray ? "minimize" : "exit"}
+            onChange={(value) => {
+              handleExitSettingsChange(value)
+            }}
+            className={style.radioStyle}
+          >
+            <Radio value="minimize">最小化到系统托盘</Radio>
+            <Radio value="exit">退出程序</Radio>
+          </RadioGroup>
+        </div>
+        <div>
+          <Checkbox
+            checked={confirmOnClose}
+            onChange={(checked: boolean) => {
+              handleExitConfirmOnCloseChange(checked)
+            }}
+          >关闭前提示</Checkbox>
+        </div>
+      </Modal>
     </>
   )
 }
