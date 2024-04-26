@@ -6,7 +6,7 @@ import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store.ts"
-import { setConfirmOnClose, setMinimizeToTray } from "../../store/settingsSlice.ts"
+import { setConfirmOnClose, setFontFamily, setMinimizeToTray } from "../../store/settingsSlice.ts"
 // import { useSelector } from "react-redux"
 // import { RootState } from "../../store/store.ts"
 
@@ -14,22 +14,34 @@ const RadioGroup = Radio.Group
 
 export default function Settings() {
   const dispatch = useDispatch()
-  // 从 Redux state 读取 minimizeToTray 设置
+  // 从 Redux state 读取状态
   const minimizeToTray = useSelector((state: RootState) => state.settings.minimizeToTray)
   const confirmOnClose = useSelector((state: RootState) => state.settings.confirmOnClose)
-  const Option = Select.Option
-  const options = ["系统字体", "HarmonyOS Sans"]
+  const systemFont = useSelector((state: RootState) => state.settings.fontFamily)
   const attribute = parseInt(document.documentElement.getAttribute("data-build-timestamp")!)
   const [licenseVisible, setLicenseVisible] = useState<boolean>(false)
   const [historyCount, setHistoryCount] = useState(0)
+  const Option = Select.Option
+  const options = [
+    {
+      label: "默认字体",
+      value: "inherit"
+    },
+    {
+      label: "HarmonyOS Sans",
+      value: "HarmonyOS Sans"
+    }
+  ]
 
   // 定义 onChange 处理函数
   const handleExitSettingsChange = (value: string) => {
-    // 根据选中的值更新 minimizeToTray 设置
     dispatch(setMinimizeToTray(value === "minimize"))
   }
   const handleExitConfirmOnCloseChange = (value: boolean) => {
     dispatch(setConfirmOnClose(value))
+  }
+  const handleFontFamilyChange = (value: string) => {
+    dispatch(setFontFamily(value))
   }
 
 
@@ -130,18 +142,16 @@ export default function Settings() {
           <div className={style.itemTitle}>字体设置：</div>
           <div>
             <Select
-              placeholder="Please select"
+              placeholder="请选择字体"
               style={{ width: 250 }}
-              onChange={(value) =>
-                Message.info({
-                  content: `You select ${value}.`,
-                  showIcon: true
-                })
+              onChange={(value: string) =>
+                handleFontFamilyChange(value)
               }
+              value={systemFont}
             >
               {options.map((option, _index) => (
-                <Option key={option} value={option}>
-                  {option}
+                <Option key={option.value} value={option.value}>
+                  {option.label}
                 </Option>
               ))}
             </Select>
