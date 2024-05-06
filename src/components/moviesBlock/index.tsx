@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from "react"
-import { Skeleton } from "@arco-design/web-react"
+import { Skeleton, Tooltip } from "@arco-design/web-react"
 import { useRef } from "react"
 import style from "./index.module.less"
 import "./index.override.less"
+import LikeIcon from "../icons/likeIcon.tsx"
+import { resourceType } from "../../../electron/dbTypes.ts"
 
 interface ChildProps {
   movieName: string
   imgPath: string
   resourceId: number
-  resourceType: "movie" | "tv"
+  resourceType: resourceType
+  // 收藏状态
+  isFavourite: boolean
 }
 
 
@@ -67,6 +71,11 @@ const ChildComponent: FC<ChildProps> = (props) => {
           ref={canvasRef}
           className={`${isImgLoaded ? `${style.canvasActive} ${style.canvas}` : `${style.canvasInactive} ${style.canvas}`}`}
         ></canvas>
+        <div className={style.favourite}>
+          <Tooltip position="bottom" trigger="hover" content={props.isFavourite ? "取消收藏" : "收藏"}>
+            <div className={style.likeIcon}><LikeIcon /></div>
+          </Tooltip>
+        </div>
       </div>
       <div className={style.movieName}>{props.movieName}</div>
     </div>

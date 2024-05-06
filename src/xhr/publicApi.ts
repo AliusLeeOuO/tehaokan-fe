@@ -1,5 +1,6 @@
 import axiosInstance from "./index.ts"
 import { AxiosResponse } from "axios"
+import { resourceType } from "../../electron/dbTypes.ts"
 
 export interface ImDBResponseData {
   content: imDBResponseDataContent[]
@@ -36,7 +37,7 @@ export interface recommendedResponseDataContent {
   id: number
   name: string
   poster_url: string
-  type: "movie" | "tv"
+  type: resourceType
 }
 
 export interface getMovieInfoByIdResponse {

@@ -1,6 +1,13 @@
 import { app, BrowserWindow, ipcMain } from "electron"
 import path from "node:path"
-import { dropHistory, getSqlite3, historyCount, insertIntoHistory, queryHistory } from "./better-sqlite3"
+import {
+  dropHistory,
+  getSqlite3,
+  historyCount,
+  insertIntoFavourite,
+  insertIntoHistory, queryFavourite,
+  queryHistory
+} from "./better-sqlite3"
 import tray from "./tray.ts"
 
 // The built directory structure
@@ -167,6 +174,17 @@ ipcMain.on("drop-history-data", (event) => {
     return
   }
   event.reply("drop-history-data-reply", "Failed")
+})
+
+// 收藏操作
+ipcMain.on("insert-favourite", (_event, resourceType, resourceId) => {
+  insertIntoFavourite(resourceType, resourceId)
+})
+
+// 查询收藏记录
+ipcMain.on("query-favourite", (event, resourceType) => {
+  const favouriteData = queryFavourite(resourceType)
+  event.reply("query-favourite-reply", favouriteData)
 })
 
 

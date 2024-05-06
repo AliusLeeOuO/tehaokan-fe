@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge, ipcMain } from "electron"
+import { ipcRenderer, contextBridge } from "electron"
 
 // 解析通过 'additionalArguments' 传递的自定义数据
 const parseCustomArgs = () => {

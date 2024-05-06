@@ -6,9 +6,10 @@ import MinimizeIcon from "../../components/icons/minimizeIcon.tsx"
 import MaximizeIcon from "../../components/icons/maximizeIcon.tsx"
 import { useEffect, useState } from "react"
 import usePublicApi, { type tvListItem } from "../../xhr/publicApi.ts"
+import { resourceType } from "../../../electron/dbTypes.ts"
 
 export default function PlayerComponent() {
-  const [resourceType, setResourceType] = useState<"movie" | "tv" | "">("")
+  const [resourceType, setResourceType] = useState<resourceType | "">("")
   const [resourceLoading, setResourceLoading] = useState(true)
   const [tvList, setTvList] = useState<tvListItem[]>([])
   const { getMovieInfoById, getTvInfoById } = usePublicApi()

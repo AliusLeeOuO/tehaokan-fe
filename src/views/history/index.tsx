@@ -2,11 +2,13 @@ import React, { useEffect, useState, useMemo } from "react"
 import dayjs from "dayjs"
 import HistoryBlock from "../../components/historyBlock"
 import style from "./index.module.less"
+import { Empty } from "@arco-design/web-react"
+import { resourceType } from "../../../electron/dbTypes.ts"
 
 // 定义历史记录项的类型
 interface HistoryItem {
   id: number;
-  resource_type: "movie" | "tv";
+  resource_type: resourceType;
   resource_id: number;
   gmt_create: string;
 }
@@ -60,18 +62,26 @@ const History: React.FC = () => {
 
   return (
     <>
-      <div className={style.historyContainer}>
-        {Object.entries(historyByDate).map(([date, items]) => (
-          <div key={date}>
-            <div className={style.historyDate}>{date}</div>
-            <div className={style.historyList}>
-              {items.map((item: HistoryItem) => (
-                <HistoryBlock key={item.id} resourceId={item.resource_id} resourceType={item.resource_type} />
-              ))}
-            </div>
+      {
+        history.length === 0 ? (
+        <div className={style.empty}>
+          <Empty description="还没有历史记录"/>
+        </div>
+        ) : (
+          <div className={style.historyContainer}>
+            {Object.entries(historyByDate).map(([date, items]) => (
+              <div key={date}>
+                <div className={style.historyDate}>{date}</div>
+                <div className={style.historyList}>
+                  {items.map((item: HistoryItem) => (
+                    <HistoryBlock key={item.id} resourceId={item.resource_id} resourceType={item.resource_type} />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        )
+      }
     </>
   )
 }

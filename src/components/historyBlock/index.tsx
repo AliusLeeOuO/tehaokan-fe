@@ -4,10 +4,11 @@ import { useRef } from "react"
 import style from "./index.module.less"
 import "./index.override.less"
 import usePublicApi from "../../xhr/publicApi.ts"
+import { resourceType } from "../../../electron/dbTypes.ts"
 
 interface ChildProps {
   resourceId: number
-  resourceType: "movie" | "tv"
+  resourceType: resourceType
 }
 
 
