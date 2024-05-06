@@ -48,6 +48,9 @@ importers:
         specifier: ^3.0.17
         version: 3.0.17(core-js@3.37.0)
     devDependencies:
+      '@electron-toolkit/tsconfig':
+        specifier: ^1.0.1
+        version: 1.0.1(@types/node@20.12.8)
       '@electron/rebuild':
         specifier: ^3.6.0
         version: 3.6.0
@@ -118,6 +121,11 @@ packages:
   '@develar/schema-utils@2.6.5':
     resolution: {integrity: sha512-0cp4PsWQ/9avqTVMCtZ+GirikIA36ikvjtHweU4/j8yLtgObI0+JUPhYFScgwlteveGB1rt3Cm8UhN04XayDig==}
     engines: {node: '>= 8.9.0'}
+
+  '@electron-toolkit/tsconfig@1.0.1':
+    resolution: {integrity: sha512-M0Mol3odspvtCuheyujLNAW7bXq7KFNYVMRtpjFa4ZfES4MuklXBC7Nli/omvc+PRKlrklgAGx3l4VakjNo8jg==}
+    peerDependencies:
+      '@types/node': '*'
 
   '@electron/asar@3.2.9':
     resolution: {integrity: sha512-Vu2P3X2gcZ3MY9W7yH72X9+AMXwUQZEJBrsPIbX0JsdllLtoh62/Q8Wg370/DawIEVKOyfD6KtTLo645ezqxUA==}
@@ -2407,6 +2415,10 @@ snapshots:
     dependencies:
       ajv: 6.12.6
       ajv-keywords: 3.5.2(ajv@6.12.6)
+
+  '@electron-toolkit/tsconfig@1.0.1(@types/node@20.12.8)':
+    dependencies:
+      '@types/node': 20.12.8
 
   '@electron/asar@3.2.9':
     dependencies:

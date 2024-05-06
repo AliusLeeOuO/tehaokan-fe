@@ -62,6 +62,9 @@ export default function Recommend() {
     (async () => {
       await fetchRecommended()
     })()
+    return () => {
+      window.ipcRenderer.removeAllListeners("query-favourite-reply")
+    }
   }, [])
 
   return <>

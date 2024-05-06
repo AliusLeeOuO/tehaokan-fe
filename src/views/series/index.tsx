@@ -57,6 +57,9 @@ export default function Series() {
     (async function() {
       await fetchSeriesList()
     })()
+    return () => {
+      window.ipcRenderer.removeAllListeners("query-favourite-reply")
+    }
   }, [])
 
   return <>

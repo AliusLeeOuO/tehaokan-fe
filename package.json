@@ -28,6 +28,7 @@
     "xgplayer": "^3.0.17"
   },
   "devDependencies": {
+    "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/rebuild": "^3.6.0",
     "@types/better-sqlite3": "^7.6.10",
     "@types/node": "^20.12.8",

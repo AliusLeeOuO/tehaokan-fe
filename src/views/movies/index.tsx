@@ -61,6 +61,9 @@ export default function Movies() {
     (async function() {
       await fetchImDB()
     })()
+    return () => {
+      window.ipcRenderer.removeAllListeners("query-favourite-reply")
+    }
   }, [])
 
   return <>

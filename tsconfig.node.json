@@ -9,5 +9,6 @@
   },
   "include": [
     "vite.config.ts"
-  ]
+  ],
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json"
 }
