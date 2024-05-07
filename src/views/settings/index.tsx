@@ -7,8 +7,6 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store.ts"
 import { setConfirmOnClose, setFontFamily, setMinimizeToTray } from "../../store/settingsSlice.ts"
-// import { useSelector } from "react-redux"
-// import { RootState } from "../../store/store.ts"
 
 const RadioGroup = Radio.Group
 

@@ -12,15 +12,18 @@ import {
 import storage from "redux-persist/lib/storage"
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import settingsReducer from "./settingsSlice"
+import searchReducer from "./searchSlice"
 
 
 const rootReducer = combineReducers({
-  settings: settingsReducer
+  settings: settingsReducer,
+  search: searchReducer
 })
 
 const persistConfig = {
   key: "root",
-  storage
+  storage,
+  blacklist: ["search"]
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

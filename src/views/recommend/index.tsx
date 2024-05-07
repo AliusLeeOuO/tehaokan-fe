@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import MoviesBlock from "../../components/moviesBlock"
 import PublicLoading from "../../components/publicLoading"
 import { FavouriteItem } from "../../../electron/db-types.ts"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store.ts"
 
 export default function Recommend() {
   // 声明新类型，给recommendedResponseDataContent添加一个新属性 isFavourite
@@ -67,6 +69,8 @@ export default function Recommend() {
     }
   }, [])
 
+  const [filteredRecommended, setFilteredRecommended] = useState<recommendedResponseDataContentWithFavourite[]>([])
+
   // 更新收藏状态
   const updateFavouriteStatus = async () => {
     // 仅更新收藏状态，不需要重新获取推荐列表
@@ -83,11 +87,17 @@ export default function Recommend() {
     })
     setRecommended(recommendedData)
   }
+  const searchValue = useSelector((state: RootState) => state.search.searchValue)
+  useEffect(() => {
+    // 根据搜索值筛选推荐列表
+    const filteredData = recommended.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()))
+    setFilteredRecommended(filteredData)
+  }, [searchValue, recommended])
 
   return <>
     {
       isLoaded ? <div className={style.recommendList}>
-        {recommended.map(item => {
+        {filteredRecommended.map(item => {
           return <MoviesBlock
             key={item.name}
             movieName={item.name}

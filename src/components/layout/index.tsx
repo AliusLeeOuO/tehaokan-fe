@@ -6,12 +6,13 @@ import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
 import CloseIcon from "../icons/closeIcon.tsx"
 import MaximizeIcon from "../icons/maximizeIcon.tsx"
 import MinimizeIcon from "../icons/minimizeIcon.tsx"
-import { lazy, Suspense, useState } from "react"
+import React, { lazy, Suspense, useEffect, useState } from "react"
 import PublicLoading from "../publicLoading"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store.ts"
 import ExitModal from "../exitModal"
 import Nav from "../nav"
+import { setSearchValue } from "../../store/searchSlice.ts"
 
 const Movies = lazy(() => import("../../views/movies"))
 const Recommend = lazy(() => import("../../views/recommend"))
@@ -58,6 +59,17 @@ export default function Layout() {
   // 检查当前路由是否在隐藏列表中
   const showSelector = !hiddenRoutes.includes(location.pathname)
 
+  // 读取搜索框的值
+  const dispatch = useDispatch()
+  const searchValue = useSelector((state: RootState) => state.search.searchValue)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchValue(e.target.value))
+  }
+
+  useEffect(() => {
+    dispatch(setSearchValue('')); // 当路由变化时，清除searchValue
+  }, [location, dispatch]);
+
   return (
     <>
       <div className={style.layout}>
@@ -92,7 +104,14 @@ export default function Layout() {
             <div className={style.rightZone}>
               <div className={style.searchItem}>
                 <div className={style.searchContainer}>
-                  <input type="text" placeholder="搜索你喜欢的视频" className={style.searchInput} />
+                  {/* TODO: 在设置界面隐藏搜索框 完成其它界面的搜索功能 */}
+                  <input
+                    type="text"
+                    placeholder="搜索你喜欢的视频"
+                    className={style.searchInput}
+                    value={searchValue}
+                    onChange={handleInputChange}
+                  />
                   <img src={SearchIcon} alt="" className={style.searchIcon} />
                 </div>
               </div>
