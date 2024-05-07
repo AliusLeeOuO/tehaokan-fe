@@ -6,7 +6,7 @@ import MinimizeIcon from "../../components/icons/minimizeIcon.tsx"
 import MaximizeIcon from "../../components/icons/maximizeIcon.tsx"
 import { useEffect, useState } from "react"
 import usePublicApi, { type tvListItem } from "../../xhr/publicApi.ts"
-import { resourceType } from "../../../electron/dbTypes.ts"
+import { resourceType } from "../../../electron/db-types.ts"
 
 export default function PlayerComponent() {
   const [resourceType, setResourceType] = useState<resourceType | "">("")

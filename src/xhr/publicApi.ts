@@ -1,6 +1,6 @@
 import axiosInstance from "./index.ts"
 import { AxiosResponse } from "axios"
-import { resourceType } from "../../electron/dbTypes.ts"
+import { resourceType } from "../../electron/db-types.ts"
 
 export interface ImDBResponseData {
   content: imDBResponseDataContent[]

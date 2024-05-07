@@ -1,10 +1,10 @@
 import { app } from "electron"
 import path from "node:path"
 import Database from "better-sqlite3"
-import { FavouriteItem, HistoryItem, resourceType } from "./dbTypes.ts"
+import { FavouriteItem, HistoryItem, resourceType } from "../db-types.ts"
 
 const root = path.join(__dirname, "..")
-const TAG = "[better-sqlite3]"
+// const TAG = "[better-sqlite3]"
 let database: Database.Database
 
 function initializeDatabase(database: Database.Database): void {
@@ -134,12 +134,7 @@ export function insertIntoFavourite(resourceType: resourceType, resourceId: numb
 }
 
 // 查询收藏记录，可选参数为资源类型，如果不传则查询所有
-export function queryFavourite(resourceType?: resourceType): {
-  id: number,
-  resourceType: string;
-  resourceId: number;
-  gmtCreate: string
-}[] {
+export function queryFavourite(resourceType?: resourceType): FavouriteItem[] {
   let selectSQL = `
       SELECT id, resource_type as resourceType, resource_id as resourceId, gmt_create as gmtCreate
       FROM favourite
@@ -166,6 +161,24 @@ export function dropFavourite(): boolean {
     return true
   } catch (error) {
     console.error("Error deleting favourite records:", error)
+    return false
+  }
+}
+
+// 删除单个收藏记录
+export function deleteFavourite(resourceType: resourceType, resourceId: number): boolean {
+  try {
+    const query = `
+        DELETE
+        FROM favourite
+        WHERE resource_type = ?
+          AND resource_id = ?;
+    `
+    const stmt = database.prepare(query)
+    stmt.run(resourceType, resourceId)
+    return true
+  } catch (error) {
+    console.error("Error deleting favourite record:", error)
     return false
   }
 }

@@ -3,7 +3,7 @@ import usePublicApi, { imDBResponseDataContent } from "../../xhr/publicApi.ts"
 import MoviesBlock from "../../components/moviesBlock"
 import style from "./index.module.less"
 import PublicLoading from "../../components/publicLoading"
-import { FavouriteItem } from "../../../electron/dbTypes.ts"
+import { FavouriteItem } from "../../../electron/db-types.ts"
 
 export default function Movies() {
   // 声明新类型，给imDBResponseDataContent添加一个新属性 isFavourite
@@ -66,11 +66,34 @@ export default function Movies() {
     }
   }, [])
 
+  // 更新收藏状态
+  const updateFavouriteStatus = async () => {
+    // 仅更新收藏状态
+    const favouriteData = await fetchFavourite()
+    const updatedMovieList = movieList.map(item => {
+      const isFavourite = favouriteData.some(favouriteItem => {
+        return favouriteItem.resourceId === item.id
+      })
+      return {
+        ...item,
+        isFavourite: isFavourite
+      }
+    })
+    setMovieList(updatedMovieList)
+  }
+
   return <>
     {
       isLoaded ? <div className={style.movieList}>
         {movieList.map(item => {
-          return <MoviesBlock key={item.id} movieName={item.name} imgPath={item.poster_url}  resourceId={item.id} isFavourite={item.isFavourite} resourceType="movie"/>
+          return <MoviesBlock
+            key={item.id}
+            movieName={item.name}
+            imgPath={item.poster_url}
+            resourceId={item.id}
+            isFavourite={item.isFavourite}
+            resourceType="movie"
+            onFavouriteChange={updateFavouriteStatus}/>
         })}
       </div> : <PublicLoading />
     }

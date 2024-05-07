@@ -1,14 +1,8 @@
 import { app, BrowserWindow, ipcMain } from "electron"
 import path from "node:path"
-import {
-  dropHistory,
-  getSqlite3,
-  historyCount,
-  insertIntoFavourite,
-  insertIntoHistory, queryFavourite,
-  queryHistory
-} from "./better-sqlite3"
+import { getSqlite3 } from "./database/better-sqlite3.ts"
 import tray from "./tray.ts"
+import initDbIpc from "./database/db-ipc.ts"
 
 // The built directory structure
 //
@@ -151,42 +145,7 @@ ipcMain.on("open-player-window", (_event, arg) => {
   secondWindow.loadURL(playerWindowURL)
 })
 
-// 数据库操作
-
-ipcMain.on("insert-history", (_event, resourceType, resourceId) => {
-  insertIntoHistory(resourceType, resourceId)
-})
-
-ipcMain.on("query-history", (event) => {
-  const historyData = queryHistory()
-  event.reply("query-history-reply", historyData)
-})
-
-ipcMain.on("get-history-count", (event) => {
-  const count = historyCount()
-  event.reply("get-history-count-reply", count)
-})
-
-ipcMain.on("drop-history-data", (event) => {
-  const result = dropHistory() // 调用函数删除所有历史记录
-  if (result) {
-    event.reply("drop-history-data-reply", "Success")
-    return
-  }
-  event.reply("drop-history-data-reply", "Failed")
-})
-
-// 收藏操作
-ipcMain.on("insert-favourite", (_event, resourceType, resourceId) => {
-  insertIntoFavourite(resourceType, resourceId)
-})
-
-// 查询收藏记录
-ipcMain.on("query-favourite", (event, resourceType) => {
-  const favouriteData = queryFavourite(resourceType)
-  event.reply("query-favourite-reply", favouriteData)
-})
-
+initDbIpc()
 
 app.whenReady().then(() => {
   createWindow()

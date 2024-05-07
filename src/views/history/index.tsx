@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import HistoryBlock from "../../components/historyBlock"
 import style from "./index.module.less"
 import { Empty } from "@arco-design/web-react"
-import { resourceType } from "../../../electron/dbTypes.ts"
+import { resourceType } from "../../../electron/db-types.ts"
 
 // 定义历史记录项的类型
 interface HistoryItem {

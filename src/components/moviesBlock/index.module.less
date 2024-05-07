@@ -20,6 +20,9 @@
     &:hover {
       box-shadow: 0 0 16px rgba(0, 0, 0, .4);
       transform: scale(1.02);
+      .favourite {
+        opacity: 1;
+      }
     }
 
     .skeleton, .canvas {
@@ -65,10 +68,12 @@
       font-size: 20px;
       transition: all .3s;
       z-index: 1;
-      background-color: #bfa;
+      background-color: rgba(0,0,0,.5);
       display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 0;
+      border-radius: 8px / 8.00001px;
 
       .likeIcon {
         width: 100%;
@@ -76,9 +81,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
         svg {
-          width: 80%;
-          height: 80%;
+          width: 70%;
+          height: 70%;
+          fill: #fff;
         }
       }
     }
@@ -93,3 +100,5 @@
     }
   }
 }
+
+

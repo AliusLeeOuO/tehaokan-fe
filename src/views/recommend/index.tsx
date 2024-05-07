@@ -3,7 +3,7 @@ import usePublicApi, { recommendedResponseDataContent } from "../../xhr/publicAp
 import { useEffect, useState } from "react"
 import MoviesBlock from "../../components/moviesBlock"
 import PublicLoading from "../../components/publicLoading"
-import { FavouriteItem } from "../../../electron/dbTypes.ts"
+import { FavouriteItem } from "../../../electron/db-types.ts"
 
 export default function Recommend() {
   // 声明新类型，给recommendedResponseDataContent添加一个新属性 isFavourite
@@ -67,6 +67,23 @@ export default function Recommend() {
     }
   }, [])
 
+  // 更新收藏状态
+  const updateFavouriteStatus = async () => {
+    // 仅更新收藏状态，不需要重新获取推荐列表
+    const favouriteData = await fetchFavourite()
+    const recommendedData: recommendedResponseDataContentWithFavourite[] = recommended.map(item => {
+      const isFavourite = favouriteData.some(favouriteItem => {
+          return favouriteItem.resourceType === item.type && favouriteItem.resourceId === item.id
+        }
+      )
+      return {
+        ...item,
+        isFavourite: isFavourite
+      }
+    })
+    setRecommended(recommendedData)
+  }
+
   return <>
     {
       isLoaded ? <div className={style.recommendList}>
@@ -78,6 +95,7 @@ export default function Recommend() {
             resourceId={item.id}
             resourceType={item.type}
             isFavourite={item.isFavourite}
+            onFavouriteChange={updateFavouriteStatus}
           />
         })}
       </div> : <PublicLoading />

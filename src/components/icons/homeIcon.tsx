@@ -1,7 +1,7 @@
 import React from "react"
 
 
-const CustomIcon: React.FC = () => {
+const homeIcon: React.FC = () => {
   return (
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
       <path d="M833.4 363.7v444c0 24.5-9.6 47.7-27.2 65.2-17.5 17.5-40.7 27.2-65.2 27.2h-93.1v-236c0-43-35-78-78-78H456.1c-43 0-78 35-78 78v236H285c-24.5 0-47.7-9.6-65.2-27.2-17.5-17.5-27.2-40.7-27.2-65.2v-444h-56v444c0 81.8 66.6 148.4 148.4 148.4h456c81.8 0 148.4-66.6 148.4-148.4v-444h-56zM434.1 664.2c0-12.1 9.9-22 22-22h113.7c12.1 0 22 9.9 22 22v236H434.1v-236z" />
@@ -10,5 +10,5 @@ const CustomIcon: React.FC = () => {
   )
 }
 
-export default CustomIcon
+export default homeIcon
 

@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-electron/electron-env" />
 
-import { resourceType } from "./dbTypes.ts"
+import { resourceType } from "./db-types.ts"
 
 // 用于渲染进程，通过 `preload.ts` 暴露
 declare global {

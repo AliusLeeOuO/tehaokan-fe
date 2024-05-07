@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useState, type MouseEvent } from "react"
 import { Skeleton, Tooltip } from "@arco-design/web-react"
 import { useRef } from "react"
 import style from "./index.module.less"
 import "./index.override.less"
-import LikeIcon from "../icons/likeIcon.tsx"
-import { resourceType } from "../../../electron/dbTypes.ts"
+import { resourceType } from "../../../electron/db-types.ts"
+import InBlockFavouriteIcon from "../icons/inBlockFavouriteIcon.tsx"
+import InBlockIsFavouriteIcon from "../icons/inBlockIsFavouriteIcon.tsx"
 
 interface ChildProps {
   movieName: string
@@ -13,6 +14,7 @@ interface ChildProps {
   resourceType: resourceType
   // 收藏状态
   isFavourite: boolean
+  onFavouriteChange: () => void  // New prop for the event handler
 }
 
 
@@ -51,6 +53,16 @@ const ChildComponent: FC<ChildProps> = (props) => {
     }
   }, [props.imgPath])
 
+  const handlerFavourite = (e: MouseEvent) => {
+    e.stopPropagation()
+    if (props.isFavourite) {
+      window.ipcRenderer.send("delete-favourite", props.resourceType, props.resourceId)
+    } else {
+      window.ipcRenderer.send("insert-favourite", props.resourceType, props.resourceId)
+    }
+    props.onFavouriteChange()
+  }
+
 
   return (
     <div className={`${style.movieBlock} movie-block-override`} onClick={openPlayerWindow}>
@@ -71,9 +83,13 @@ const ChildComponent: FC<ChildProps> = (props) => {
           ref={canvasRef}
           className={`${isImgLoaded ? `${style.canvasActive} ${style.canvas}` : `${style.canvasInactive} ${style.canvas}`}`}
         ></canvas>
-        <div className={style.favourite}>
-          <Tooltip position="bottom" trigger="hover" content={props.isFavourite ? "取消收藏" : "收藏"}>
-            <div className={style.likeIcon}><LikeIcon /></div>
+        <div className={style.favourite} onClick={handlerFavourite}>
+          <Tooltip position="bottom" trigger="hover" content={props.isFavourite ? "取消收藏" : "收藏"} className="tooltipOverride" popupHoverStay={false}>
+            <div className={style.likeIcon}>
+              {
+                props.isFavourite ? <InBlockIsFavouriteIcon /> : <InBlockFavouriteIcon />
+              }
+            </div>
           </Tooltip>
         </div>
       </div>
