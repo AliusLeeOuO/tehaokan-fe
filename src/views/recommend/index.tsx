@@ -69,7 +69,6 @@ export default function Recommend() {
     }
   }, [])
 
-  const [filteredRecommended, setFilteredRecommended] = useState<recommendedResponseDataContentWithFavourite[]>([])
 
   // 更新收藏状态
   const updateFavouriteStatus = async () => {
@@ -87,6 +86,9 @@ export default function Recommend() {
     })
     setRecommended(recommendedData)
   }
+
+  // 根据搜索值筛选推荐列表
+  const [filteredRecommended, setFilteredRecommended] = useState<recommendedResponseDataContentWithFavourite[]>([])
   const searchValue = useSelector((state: RootState) => state.search.searchValue)
   useEffect(() => {
     // 根据搜索值筛选推荐列表

@@ -1,10 +1,10 @@
 import React from "react"
 import { NavLink, useLocation } from "react-router-dom"
 import style from "./index.module.less" // 根据需要调整路径
-import HomeIcon from "../icons/homeIcon"
-import LikeIcon from "../icons/likeIcon"
-import HistoryIcon from "../icons/historyIcon"
-import SettingsIcon from "../icons/settingsIcon"
+import HomeIcon from "../../../icons/homeIcon.tsx"
+import LikeIcon from "../../../icons/likeIcon.tsx"
+import HistoryIcon from "../../../icons/historyIcon.tsx"
+import SettingsIcon from "../../../icons/settingsIcon.tsx"
 
 
 const Nav: React.FC = () => {

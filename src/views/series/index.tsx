@@ -4,6 +4,8 @@ import MoviesBlock from "../../components/moviesBlock"
 import PublicLoading from "../../components/publicLoading"
 import style from "./index.module.less"
 import { FavouriteItem } from "../../../electron/db-types.ts"
+import { RootState } from "../../store/store.ts"
+import { useSelector } from "react-redux"
 
 export default function Series() {
   // 声明新类型，给seriesResponseDataContent添加一个新属性 isFavourite
@@ -63,7 +65,7 @@ export default function Series() {
   }, [])
 
   // 更新收藏状态
-  const updateFavouriteStatus =async () => {
+  const updateFavouriteStatus = async () => {
     // 仅更新收藏状态
     const favouriteData = await fetchFavourite()
     const updatedMovieList = movieList.map(item => {
@@ -78,17 +80,27 @@ export default function Series() {
     setMovieList(updatedMovieList)
   }
 
+  // 根据搜索值筛选列表
+  const [filteredRecommended, setFilteredRecommended] = useState<seriesResponseDataContentWithFavourite[]>([])
+  const searchValue = useSelector((state: RootState) => state.search.searchValue)
+  useEffect(() => {
+    // 根据搜索值筛选推荐列表
+    const filteredData = movieList.filter(item => item.series_name.toLowerCase().includes(searchValue.toLowerCase()))
+    setFilteredRecommended(filteredData)
+  }, [searchValue, movieList])
+
   return <>
     {
       isLoaded ? <div className={style.seriesList}>
-        {movieList.map(item => {
-          return <MoviesBlock key={item.id}
-                              movieName={item.series_name}
-                              imgPath={item.poster_url}
-                              isFavourite={item.isFavourite}
-                              resourceId={item.id}
-                              resourceType="tv"
-                              onFavouriteChange={updateFavouriteStatus}
+        {filteredRecommended.map(item => {
+          return <MoviesBlock
+            key={item.id}
+            movieName={item.series_name}
+            imgPath={item.poster_url}
+            isFavourite={item.isFavourite}
+            resourceId={item.id}
+            resourceType="tv"
+            onFavouriteChange={updateFavouriteStatus}
           />
         })}
       </div> : <PublicLoading />

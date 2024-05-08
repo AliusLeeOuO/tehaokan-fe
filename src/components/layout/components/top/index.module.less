@@ -1,0 +1,102 @@
+@import "../../../../assets/css/variable.less";
+
+header {
+  border-bottom: 2px solid #F1F1F1;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  height: @header-height;
+  gap: 40px;
+  -webkit-app-region: drag;
+
+  .logo {
+    display: flex;
+    place-items: center;
+
+    img {
+      -webkit-app-region: no-drag;
+      height: 50%;
+    }
+  }
+
+  .selector {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    font-size: 18px;
+
+    .selectorItem {
+      -webkit-app-region: no-drag;
+      cursor: pointer;
+      position: relative;
+      padding: 10px 0;
+      color: #000;
+      text-decoration: none;
+      transition: 0.2s ease-in-out;
+
+      &:hover {
+        color: @primary-color;
+      }
+
+      &.selectorItemActive {
+        font-weight: bold;
+        color: @primary-color;
+
+        &::before {
+          background-color: @primary-color;
+        }
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        width: calc(100% - 10px);
+        background-color: transparent;
+        transition: all 0.3s;
+        margin: auto;
+      }
+    }
+  }
+
+  .rightZone {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 30px;
+
+    .actionButtons {
+      display: flex;
+      place-items: center;
+      gap: 10px;
+
+      .actionButton {
+        -webkit-app-region: no-drag;
+        background-color: #fff;
+        border-radius: 9999px;
+        cursor: pointer;
+        font-size: 18px;
+        height: 40px;
+        width: 40px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        transition: 0.2s ease-in-out;
+
+        &:hover {
+          background-color: #F1F2F3;
+        }
+
+        svg {
+          height: 50%;
+          width: 50%;
+          fill: #616161;
+        }
+      }
+    }
+  }
+}

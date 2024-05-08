@@ -64,9 +64,9 @@ const History: React.FC = () => {
     <>
       {
         history.length === 0 ? (
-        <div className={style.empty}>
-          <Empty description="还没有历史记录"/>
-        </div>
+          <div className={style.empty}>
+            <Empty description="还没有历史记录" />
+          </div>
         ) : (
           <div className={style.historyContainer}>
             {Object.entries(historyByDate).map(([date, items]) => (

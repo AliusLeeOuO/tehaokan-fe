@@ -4,6 +4,8 @@ import MoviesBlock from "../../components/moviesBlock"
 import style from "./index.module.less"
 import PublicLoading from "../../components/publicLoading"
 import { FavouriteItem } from "../../../electron/db-types.ts"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store.ts"
 
 export default function Movies() {
   // 声明新类型，给imDBResponseDataContent添加一个新属性 isFavourite
@@ -30,7 +32,6 @@ export default function Movies() {
       window.ipcRenderer.on("query-favourite-reply", handleQueryFavouriteReply)
     })
   }
-
 
 
   async function fetchImDB() {
@@ -82,10 +83,19 @@ export default function Movies() {
     setMovieList(updatedMovieList)
   }
 
+  // 搜索值
+  const searchValue = useSelector((state: RootState) => state.search.searchValue)
+  const [filteredRecommended, setFilteredRecommended] = useState<imDBResponseDataContentWithFavourite[]>([])
+  useEffect(() => {
+    // 根据搜索值筛选推荐列表
+    const filteredData = movieList.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()))
+    setFilteredRecommended(filteredData)
+  }, [searchValue, movieList])
+
   return <>
     {
       isLoaded ? <div className={style.movieList}>
-        {movieList.map(item => {
+        {filteredRecommended.map(item => {
           return <MoviesBlock
             key={item.id}
             movieName={item.name}
@@ -93,7 +103,7 @@ export default function Movies() {
             resourceId={item.id}
             isFavourite={item.isFavourite}
             resourceType="movie"
-            onFavouriteChange={updateFavouriteStatus}/>
+            onFavouriteChange={updateFavouriteStatus} />
         })}
       </div> : <PublicLoading />
     }
