@@ -1410,10 +1410,10 @@ electron-publish@24.13.1:
     lazy-val "^1.0.5"
     mime "^2.5.2"
 
-electron@^29.3.2:
-  version "29.3.2"
-  resolved "https://mirrors.cloud.tencent.com/npm/electron/-/electron-29.3.2.tgz#6f1c90c26b7cff88cfcfb326597dc61f262efd56"
-  integrity sha512-pRWsaFtbd78kEHR0lg5aMhZDY6b5JykIEhZRtyTCaJpGFObB2NFIJDzR7mTia0cZp3pPq60n/SS4gRxvSM5WFQ==
+electron@^30.0.2:
+  version "30.0.2"
+  resolved "https://mirrors.cloud.tencent.com/npm/electron/-/electron-30.0.2.tgz#95ba019216bf8be9f3097580123e33ea37497733"
+  integrity sha512-zv7T+GG89J/hyWVkQsLH4Y/rVEfqJG5M/wOBIGNaDdqd8UV9/YZPdS7CuFeaIj0H9LhCt95xkIQNpYB/3svOkQ==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^20.9.0"

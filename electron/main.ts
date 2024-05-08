@@ -36,7 +36,9 @@ function createWindow() {
       contextIsolation: true
     }
   })
-  win.webContents.openDevTools({ mode: "detach" })
+  if (VITE_DEV_SERVER_URL) {
+    win.webContents.openDevTools({ mode: "detach" })
+  }
 
   // 添加主窗口关闭事件监听
   win.on("close", () => {
@@ -123,7 +125,7 @@ ipcMain.on("open-player-window", async (_event, arg) => {
     playerWindowURL = `${VITE_DEV_SERVER_URL}#/player`
   } else {
     // 生产环境
-    playerWindowURL = `file://${path.join(process.env.DIST, "index.html")}`
+    playerWindowURL = `file://${path.join(process.env.DIST, "index.html")}#/player`
   }
 
   const secondWindow = new BrowserWindow({
@@ -144,7 +146,9 @@ ipcMain.on("open-player-window", async (_event, arg) => {
   })
   secondWindow.setMenu(null)
   await secondWindow.loadURL(playerWindowURL)
-  secondWindow.webContents.openDevTools({ mode: "detach" })
+  if (VITE_DEV_SERVER_URL) {
+    secondWindow.webContents.openDevTools({ mode: "detach" })
+  }
 })
 
 ipcMain.on("minimize-player-window", (event) => {
