@@ -14,7 +14,7 @@ import { Tooltip } from "@arco-design/web-react"
 
 export default function PlayerComponent() {
   const [resourceType, setResourceType] = useState<resourceType | "">("")
-  const [resourceLoading, setResourceLoading] = useState(true)
+  const [, setResourceLoading] = useState(true)
   const [tvList, setTvList] = useState<tvListItem[]>([])
   const { getMovieInfoById, getTvInfoById } = usePublicApi()
   const [posterUrl, setPosterUrl] = useState<string>("")
