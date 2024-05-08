@@ -16,7 +16,7 @@ export default function Search() {
 
   // 定义不显示搜索的路由列表
   const location = useLocation()
-  const hiddenRoutes = ["/settings"]
+  const hiddenRoutes = ["/settings", "/favourites", "/history"]
   // 检查当前路由是否在隐藏列表中
   const showSelector = !hiddenRoutes.includes(location.pathname)
 
@@ -26,9 +26,9 @@ export default function Search() {
         showSelector && (
           <div className={style.searchItem}>
             <div className={style.searchContainer}>
-              {/* TODO: 完成其它界面的搜索功能 */}
               <input
                 type="text"
+                spellCheck="false"
                 placeholder="搜索你喜欢的视频"
                 className={style.searchInput}
                 value={searchValue}

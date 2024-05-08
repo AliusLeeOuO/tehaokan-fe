@@ -114,7 +114,7 @@ ipcMain.on("minimize-to-tray", () => {
 })
 
 // 监听渲染进程发来的消息来打开新窗口
-ipcMain.on("open-player-window", (_event, arg) => {
+ipcMain.on("open-player-window", async (_event, arg) => {
   const { type, resourceId } = arg // 从 arg 中解构出新参数
 
   let playerWindowURL
@@ -127,6 +127,7 @@ ipcMain.on("open-player-window", (_event, arg) => {
   }
 
   const secondWindow = new BrowserWindow({
+    frame: false,
     width: 1000,
     height: 600,
     minWidth: 800,
@@ -141,8 +142,37 @@ ipcMain.on("open-player-window", (_event, arg) => {
     },
     ...arg.options
   })
+  secondWindow.setMenu(null)
+  await secondWindow.loadURL(playerWindowURL)
+  secondWindow.webContents.openDevTools({ mode: "detach" })
+})
 
-  secondWindow.loadURL(playerWindowURL)
+ipcMain.on("minimize-player-window", (event) => {
+  // 通过 event.sender 获取当前窗口
+  const window = BrowserWindow.fromWebContents(event.sender)
+  if (window) {
+    window.minimize()
+  }
+})
+
+// 最大化
+ipcMain.on("maximize-player-window", (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender)
+  if (window) {
+    if (window.isMaximized()) {
+      window.restore()
+    } else {
+      window.maximize()
+    }
+  }
+})
+
+// 关闭
+ipcMain.on("close-player-window", (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender)
+  if (window) {
+    window.close()
+  }
 })
 
 initDbIpc()
