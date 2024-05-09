@@ -6,7 +6,12 @@ import {
   insertIntoFavourite,
   insertIntoHistory,
   queryFavourite,
-  queryHistory
+  queryHistory,
+  queryWatching,
+  deleteWatching,
+  dropWatching,
+  queryWatchingItem,
+  insertIntoWatching
 } from "./better-sqlite3.ts"
 import { resourceType } from "../db-types.ts"
 
@@ -50,5 +55,39 @@ export default function initDbIpc() {
   ipcMain.on("query-favourite", (event, resourceType: resourceType) => {
     const favouriteData = queryFavourite(resourceType)
     event.reply("query-favourite-reply", favouriteData)
+  })
+
+  // 查询追剧记录
+  ipcMain.on("query-watching", (event) => {
+    const followData = queryWatching()
+    event.reply("query-follow-reply", followData)
+  })
+
+  // 添加追剧记录
+  ipcMain.on("insert-watching", (_event, resourceId: number) => {
+    insertIntoWatching(resourceId)
+  })
+
+
+  // 删除追剧记录
+  ipcMain.on("delete-watching", (_event, resourceId: number) => {
+    // 删除追剧记录
+    deleteWatching(resourceId)
+  })
+
+  // 删除所有追剧记录
+  ipcMain.on("drop-watching-data", (event) => {
+    const result = dropWatching() // 调用函数删除所有追剧记录
+    if (result) {
+      event.reply("drop-watching-data-reply", "Success")
+      return
+    }
+    event.reply("drop-watching-data-reply", "Failed")
+  })
+
+  // 查询单条追剧记录
+  ipcMain.on("query-watching-single", (event, resourceId: number) => {
+    const followData = queryWatchingItem(resourceId)
+    event.reply("query-watching-single-reply", followData)
   })
 }

@@ -1,7 +1,7 @@
 import { app } from "electron"
 import path from "node:path"
 import Database from "better-sqlite3"
-import { FavouriteItem, HistoryItem, resourceType } from "../db-types.ts"
+import { type FavouriteItem, type HistoryItem, type resourceType, type WatchingItem } from "../db-types.ts"
 
 const root = path.join(__dirname, "..")
 // const TAG = "[better-sqlite3]"
@@ -12,23 +12,10 @@ function initializeDatabase(database: Database.Database): void {
   const createHistoryTableSQL = `
       CREATE TABLE IF NOT EXISTS history
       (
-          id
-          INTEGER
-          PRIMARY
-          KEY
-          AUTOINCREMENT,
-          resource_type
-          TEXT
-          NOT
-          NULL,
-          resource_id
-          INTEGER
-          NOT
-          NULL,
-          gmt_create
-          TIMESTAMP
-          DEFAULT
-          CURRENT_TIMESTAMP
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          resource_type TEXT NOT NULL,
+          resource_id INTEGER NOT NULL,
+          gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
   `
   database.prepare(createHistoryTableSQL).run()
@@ -37,26 +24,24 @@ function initializeDatabase(database: Database.Database): void {
   const createFavouriteTableSQL = `
       CREATE TABLE IF NOT EXISTS favourite
       (
-          id
-          INTEGER
-          PRIMARY
-          KEY
-          AUTOINCREMENT,
-          resource_type
-          TEXT
-          NOT
-          NULL,
-          resource_id
-          INTEGER
-          NOT
-          NULL,
-          gmt_create
-          TIMESTAMP
-          DEFAULT
-          CURRENT_TIMESTAMP
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          resource_type TEXT NOT NULL,
+          resource_id INTEGER NOT NULL,
+          gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
   `
   database.prepare(createFavouriteTableSQL).run()
+
+  // 创建追剧记录表
+  const createWatchingTableSQL = `
+      CREATE TABLE IF NOT EXISTS watching
+      (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          resource_id INTEGER NOT NULL,
+          gmt_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+  `
+  database.prepare(createWatchingTableSQL).run()
 }
 
 export function insertIntoHistory(resourceType: resourceType, resourceId: number) {
@@ -183,6 +168,69 @@ export function deleteFavourite(resourceType: resourceType, resourceId: number):
   }
 }
 
+// 查询追剧记录
+export function queryWatching(): WatchingItem[] {
+  const selectSQL = `
+      SELECT id, resource_id as resourceId, gmt_create as gmtCreate
+      FROM watching
+      ORDER BY gmt_create DESC;
+  `
+  return database.prepare(selectSQL).all() as WatchingItem[]; // Add return statement
+}
+
+// 添加追剧记录
+export function insertIntoWatching(resourceId: number) {
+  const insertSQL = `
+      INSERT INTO watching (resource_id)
+      VALUES (?);
+  `
+  database.prepare(insertSQL).run(resourceId)
+}
+
+// 删除追剧记录
+export function deleteWatching(resourceId: number): boolean {
+  try {
+    const query = `
+        DELETE
+        FROM watching
+        WHERE resource_id = ?;
+    `
+    const stmt = database.prepare(query)
+    stmt.run(resourceId)
+    return true
+  } catch (error) {
+    console.error("Error deleting watching record:", error)
+    return false
+  }
+}
+
+// 删除所有追剧记录
+export function dropWatching(): boolean {
+  try {
+    const query = `
+        DELETE
+        FROM watching;
+    `
+    const stmt = database.prepare(query)
+    stmt.run()
+    return true
+  } catch (error) {
+    console.error("Error deleting watching records:", error)
+    return false
+  }
+}
+
+// 查询单条追剧记录
+export function queryWatchingItem(resourceId: number): boolean {
+  const selectSQL = `
+      SELECT count(*) as count
+      FROM watching
+      WHERE resource_id = ?;
+  `
+  const stmt = database.prepare(selectSQL)
+  const result = stmt.get(resourceId) as { count: number }
+  return result.count > 0
+}
 
 export function getSqlite3(filename = path.join(app.getPath("userData"), "better-sqlite3.sqlite3")) {
   if (!database) {

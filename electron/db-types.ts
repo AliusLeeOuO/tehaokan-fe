@@ -13,3 +13,9 @@ export interface HistoryItem {
   resourceId: number
   gmtCreate: string
 }
+
+export interface WatchingItem {
+  id: number
+  resourceId: number
+  gmtCreate: string
+}

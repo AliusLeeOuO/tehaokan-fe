@@ -6,9 +6,10 @@ import CloseIcon from "../../components/icons/closeIcon.tsx"
 import MinimizeIcon from "../../components/icons/minimizeIcon.tsx"
 import MaximizeIcon from "../../components/icons/maximizeIcon.tsx"
 import InBlockLikeIcon from "../../components/icons/inBlockLikeIcon.tsx"
+import InBlockIsLikeIcon from "../../components/icons/inBlockIsLikeIcon.tsx"
 import { useEffect, useRef, useState } from "react"
 import usePublicApi, { type tvListItem } from "../../xhr/publicApi.ts"
-import { resourceType } from "../../../electron/db-types.ts"
+import { type resourceType, type WatchingItem } from "../../../electron/db-types.ts"
 import { Tooltip } from "@arco-design/web-react"
 
 
@@ -18,9 +19,7 @@ export default function PlayerComponent() {
   const [tvList, setTvList] = useState<tvListItem[]>([])
   const { getMovieInfoById, getTvInfoById } = usePublicApi()
   const [posterUrl, setPosterUrl] = useState<string>("")
-  // const [resourceType, setResourceType] = useState<"movie" | "tv" | "">("")
   const [currentPlayingIndex, setCurrentPlayingIndex] = useState<number | null>(null)
-
   const [movieName, setMovieName] = useState<string>("")
 
   // const [, setResourceId] = useState<number | null>(null)
@@ -78,7 +77,7 @@ export default function PlayerComponent() {
   }, [])
 
   const changeResource = (resourceId: number) => {
-    return function() {
+    return function () {
       setResourceLoading(true)
       initPlayer(tvList[resourceId].url, posterUrl)
       setCurrentPlayingIndex(resourceId)
@@ -96,6 +95,45 @@ export default function PlayerComponent() {
 
   const closeWindow = () => {
     window.ipcRenderer.send("close-player-window")
+  }
+
+  // 追剧
+  const [followed, setFollowed] = useState(false)
+  // 查询追剧记录
+  async function fetchFollow(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const handleQueryFollow = (_event: any, queryFollowResult: boolean) => {
+        // 移除监听器
+        window.ipcRenderer.off("query-watching-single-reply", handleQueryFollow)
+        setFollowed(queryFollowResult)
+        resolve(queryFollowResult)
+      }
+      // 移除之前的监听器
+      window.ipcRenderer.off("query-watching-single-reply", handleQueryFollow)
+      // 请求收藏列表
+      window.ipcRenderer.send("query-watching-single", window.ipcRenderer.getResourceId())
+      // 监听响应
+      window.ipcRenderer.on("query-watching-single-reply", handleQueryFollow)
+    })
+  }
+
+  useEffect(() => {
+    (async () => {
+      await fetchFollow()
+    })()
+    return () => {
+      window.ipcRenderer.removeAllListeners("query-watching-single-reply")
+    }
+  }, [])
+
+  // 追剧操作
+  const followResource = () => {
+    if (followed) {
+      window.ipcRenderer.send("delete-watching", window.ipcRenderer.getResourceId())
+    } else {
+      window.ipcRenderer.send("insert-watching", window.ipcRenderer.getResourceId())
+    }
+    setFollowed(!followed)
   }
 
   return (
@@ -124,9 +162,21 @@ export default function PlayerComponent() {
               <div className={style.playListTitle}>
                 <div>播放列表</div>
                 <div className={style.playListActions}>
-                  <Tooltip position="bottom" trigger="hover" content="追剧" className="tooltipOverride"
-                           popupHoverStay={false}>
-                    <div className={style.ActionIcon}><InBlockLikeIcon /></div>
+                  <Tooltip
+                    position="bottom"
+                    trigger="hover"
+                    content={followed ? "取消追剧" : "追剧"}
+                    className="tooltipOverride"
+                    popupHoverStay={false}
+                  >
+                    <div className={style.ActionIcon} onClick={followResource}>
+                      {
+                        followed ?
+                          <InBlockIsLikeIcon />
+                          :
+                          <InBlockLikeIcon />
+                      }
+                    </div>
                   </Tooltip>
                 </div>
               </div>
@@ -135,8 +185,8 @@ export default function PlayerComponent() {
                   tvList.map((item, index) => {
                     return (
                       <div key={index}
-                           className={`${style.playListItem} ${index === currentPlayingIndex ? style.playListItemActive : ""}`}
-                           onClick={changeResource(index)}>
+                        className={`${style.playListItem} ${index === currentPlayingIndex ? style.playListItemActive : ""}`}
+                        onClick={changeResource(index)}>
                         {item.episode_name}
                       </div>
                     )
