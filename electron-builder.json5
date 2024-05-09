@@ -3,9 +3,9 @@
  */
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "com.electron.tehaokan",
+  "appId": "com.roc.tehaokan",
   "asar": true,
-  "productName": "TeHaoKan",
+  "productName": "特好看",
   "directories": {
     "output": "release/${version}"
   },
@@ -15,12 +15,14 @@
     "dist-native"
   ],
   "mac": {
+    "icon": "build/app-icon.icns",
     "target": [
       "dmg"
     ],
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
+    "icon": "build/app-icon.ico",
     "target": [
       {
         "target": "nsis",
@@ -38,6 +40,7 @@
     "deleteAppDataOnUninstall": false
   },
   "linux": {
+    "icon": "build/app-icon.png",
     "target": [
       "AppImage"
     ],
