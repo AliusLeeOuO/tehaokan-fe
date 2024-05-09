@@ -9,11 +9,14 @@ import InBlockLikeIcon from "../../components/icons/inBlockLikeIcon.tsx"
 import InBlockIsLikeIcon from "../../components/icons/inBlockIsLikeIcon.tsx"
 import { useEffect, useRef, useState } from "react"
 import usePublicApi, { type tvListItem } from "../../xhr/publicApi.ts"
-import { type resourceType, type WatchingItem } from "../../../electron/db-types.ts"
+import { type resourceType } from "../../../electron/db-types.ts"
 import { Tooltip } from "@arco-design/web-react"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store.ts"
 
 
 export default function PlayerComponent() {
+  const autoPlay = useSelector((state: RootState) => state.settings.autoPlay)
   const [resourceType, setResourceType] = useState<resourceType | "">("")
   const [, setResourceLoading] = useState(true)
   const [tvList, setTvList] = useState<tvListItem[]>([])
@@ -41,6 +44,7 @@ export default function PlayerComponent() {
       volume: 0.05,
       poster: poster,
       url: url,
+      autoplay: autoPlay,
       commonStyle: {
         playedColor: "#31b2bb",
         volumeColor: "#31b2bb"
@@ -77,7 +81,7 @@ export default function PlayerComponent() {
   }, [])
 
   const changeResource = (resourceId: number) => {
-    return function () {
+    return function() {
       setResourceLoading(true)
       initPlayer(tvList[resourceId].url, posterUrl)
       setCurrentPlayingIndex(resourceId)
@@ -99,6 +103,7 @@ export default function PlayerComponent() {
 
   // 追剧
   const [followed, setFollowed] = useState(false)
+
   // 查询追剧记录
   async function fetchFollow(): Promise<boolean> {
     return new Promise((resolve) => {
@@ -133,7 +138,9 @@ export default function PlayerComponent() {
     } else {
       window.ipcRenderer.send("insert-watching", window.ipcRenderer.getResourceId())
     }
+    // 发送更新追剧记录事件
     setFollowed(!followed)
+    window.ipcRenderer.send("update-follow", window.ipcRenderer.getType(), Number(window.ipcRenderer.getResourceId()), !followed)
   }
 
   return (
@@ -185,8 +192,8 @@ export default function PlayerComponent() {
                   tvList.map((item, index) => {
                     return (
                       <div key={index}
-                        className={`${style.playListItem} ${index === currentPlayingIndex ? style.playListItemActive : ""}`}
-                        onClick={changeResource(index)}>
+                           className={`${style.playListItem} ${index === currentPlayingIndex ? style.playListItemActive : ""}`}
+                           onClick={changeResource(index)}>
                         {item.episode_name}
                       </div>
                     )

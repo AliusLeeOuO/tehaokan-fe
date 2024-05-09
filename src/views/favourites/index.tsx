@@ -35,7 +35,6 @@ const Favourite: React.FC = () => {
 
 
   return (
-    // TODO: 动画效果等待调整
     <AnimatePresence mode="wait">
       {favourite.length === 0 ? (
         <motion.div
@@ -67,8 +66,12 @@ const Favourite: React.FC = () => {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.1 }}
                 >
-                  <HistoryBlock resourceId={item.resourceId} resourceType={item.resourceType} isFavourite={true}
-                                onFavouriteChange={updateFavouriteList} />
+                  <HistoryBlock
+                    resourceId={item.resourceId}
+                    resourceType={item.resourceType}
+                    isFavourite={true}
+                    onFavouriteChange={updateFavouriteList}
+                  />
                 </motion.div>
               ))}
             </AnimatePresence>

@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@arco-design/web-react": "^2.62.0",
-    "@reduxjs/toolkit": "^2.2.3",
+    "@reduxjs/toolkit": "^2.2.4",
     "axios": "^1.6.8",
     "better-sqlite3": "^9.6.0",
     "dayjs": "^1.11.11",
@@ -31,12 +31,12 @@
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/better-sqlite3": "^7.6.10",
-    "@types/node": "^20.12.10",
+    "@types/node": "^20.12.11",
     "@types/qs": "^6.9.15",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
-    "electron": "^30.0.2",
+    "electron": "^30.0.3",
     "electron-builder": "^24.13.3",
     "less": "^4.2.0",
     "prettier": "^3.2.5",

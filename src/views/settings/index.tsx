@@ -6,7 +6,7 @@ import dayjs from "dayjs"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store.ts"
-import { setConfirmOnClose, setFontFamily, setMinimizeToTray } from "../../store/settingsSlice.ts"
+import { setAutoPlay, setConfirmOnClose, setFontFamily, setMinimizeToTray } from "../../store/settingsSlice.ts"
 
 const RadioGroup = Radio.Group
 
@@ -16,6 +16,7 @@ export default function Settings() {
   const minimizeToTray = useSelector((state: RootState) => state.settings.minimizeToTray)
   const confirmOnClose = useSelector((state: RootState) => state.settings.confirmOnClose)
   const systemFont = useSelector((state: RootState) => state.settings.fontFamily)
+  const autoPlay = useSelector((state: RootState) => state.settings.autoPlay)
   const attribute = parseInt(document.documentElement.getAttribute("data-build-timestamp")!)
   const [licenseVisible, setLicenseVisible] = useState<boolean>(false)
   const [historyCount, setHistoryCount] = useState(0)
@@ -40,6 +41,9 @@ export default function Settings() {
   }
   const handleFontFamilyChange = (value: string) => {
     dispatch(setFontFamily(value))
+  }
+  const handleAutoPlayChange = (value: boolean) => {
+    dispatch(setAutoPlay(value))
   }
 
 
@@ -153,6 +157,19 @@ export default function Settings() {
                 </Option>
               ))}
             </Select>
+          </div>
+        </div>
+      </div>
+      <div className={style.settingsBox}>
+        <div className={style.settingsTitle}>播放设置</div>
+        <div className={style.settingsItem}>
+          <div>
+            <Checkbox
+              checked={autoPlay}
+              onChange={(checked: boolean) => {
+                handleAutoPlayChange(checked)
+              }}
+            >视频自动播放</Checkbox>
           </div>
         </div>
       </div>

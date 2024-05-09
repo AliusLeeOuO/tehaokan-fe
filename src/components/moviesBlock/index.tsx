@@ -14,7 +14,7 @@ interface ChildProps {
   resourceType: resourceType
   // 收藏状态
   isFavourite: boolean
-  onFavouriteChange: () => void  // New prop for the event handler
+  onFavouriteChange: (resourceType: resourceType, resourceId: number, newStatus: boolean) => void  // New prop for the event handler
 }
 
 
@@ -60,7 +60,7 @@ const ChildComponent: FC<ChildProps> = (props) => {
     } else {
       window.ipcRenderer.send("insert-favourite", props.resourceType, props.resourceId)
     }
-    props.onFavouriteChange()
+    props.onFavouriteChange(props.resourceType, props.resourceId, !props.isFavourite)
   }
 
 

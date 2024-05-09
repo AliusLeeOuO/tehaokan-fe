@@ -3,7 +3,7 @@ import usePublicApi, { recommendedResponseDataContent } from "../../xhr/publicAp
 import { useEffect, useState } from "react"
 import MoviesBlock from "../../components/moviesBlock"
 import PublicLoading from "../../components/publicLoading"
-import { FavouriteItem } from "../../../electron/db-types.ts"
+import { type FavouriteItem, type resourceType } from "../../../electron/db-types.ts"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store.ts"
 
@@ -71,20 +71,19 @@ export default function Recommend() {
 
 
   // 更新收藏状态
-  const updateFavouriteStatus = async () => {
+  const updateFavouriteStatus = async (resourceType: resourceType, resourceId: number, newStatus: boolean) => {
     // 仅更新收藏状态，不需要重新获取推荐列表
-    const favouriteData = await fetchFavourite()
-    const recommendedData: recommendedResponseDataContentWithFavourite[] = recommended.map(item => {
-      const isFavourite = favouriteData.some(favouriteItem => {
-          return favouriteItem.resourceType === item.type && favouriteItem.resourceId === item.id
+    // 找到这个元素直接更新state
+    const newRecommended = recommended.map(item => {
+      if (item.id === resourceId && item.type === resourceType) {
+        return {
+          ...item,
+          isFavourite: newStatus
         }
-      )
-      return {
-        ...item,
-        isFavourite: isFavourite
       }
+      return item
     })
-    setRecommended(recommendedData)
+    setRecommended(newRecommended)
   }
 
   // 根据搜索值筛选推荐列表

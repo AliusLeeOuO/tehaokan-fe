@@ -3,6 +3,7 @@ import path from "node:path"
 import { getSqlite3 } from "./database/better-sqlite3.ts"
 import tray from "./tray.ts"
 import initDbIpc from "./database/db-ipc.ts"
+import { type resourceType } from "./db-types.ts"
 
 // The built directory structure
 //
@@ -51,6 +52,15 @@ function createWindow() {
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", (new Date).toLocaleString())
+  })
+
+  // 在主进程中
+  ipcMain.on("update-follow", (_event, resourceType: resourceType, resourceId: number, newStatus: boolean) => {
+    // 获取窗口1的webContents
+    let win1WebContents = win!.webContents
+
+    // 向窗口1发送事件
+    win1WebContents.send("update-follow-reply", resourceType, resourceId, newStatus)
   })
 
   if (VITE_DEV_SERVER_URL) {
@@ -115,9 +125,25 @@ ipcMain.on("minimize-to-tray", () => {
   }
 })
 
+// Create a hash map to store open windows
+const openWindows = new Map<string, BrowserWindow>()
+
 // 监听渲染进程发来的消息来打开新窗口
 ipcMain.on("open-player-window", async (_event, arg) => {
   const { type, resourceId } = arg // 从 arg 中解构出新参数
+
+  // Create a unique key for each type and resourceId combination
+  const windowKey = `${type}-${resourceId}`
+
+  // Check if a window with the same type and resourceId already exists
+  if (openWindows.has(windowKey)) {
+    const existingWindow = openWindows.get(windowKey)
+    if (existingWindow) {
+      // If the window exists, bring it to the front
+      existingWindow.focus()
+      return
+    }
+  }
 
   let playerWindowURL
   if (VITE_DEV_SERVER_URL) {
@@ -146,6 +172,16 @@ ipcMain.on("open-player-window", async (_event, arg) => {
   })
   secondWindow.setMenu(null)
   await secondWindow.loadURL(playerWindowURL)
+
+  // Add the new window to the hash map
+  openWindows.set(windowKey, secondWindow)
+
+  secondWindow.on("closed", () => {
+    // Remove the window from the hash map when it's closed
+    openWindows.delete(windowKey)
+  })
+
+
   if (VITE_DEV_SERVER_URL) {
     secondWindow.webContents.openDevTools({ mode: "detach" })
   }

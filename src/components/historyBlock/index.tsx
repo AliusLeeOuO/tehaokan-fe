@@ -4,7 +4,7 @@ import { useRef } from "react"
 import style from "./index.module.less"
 import "./index.override.less"
 import usePublicApi from "../../xhr/publicApi.ts"
-import { resourceType } from "../../../electron/db-types.ts"
+import { type resourceType } from "../../../electron/db-types.ts"
 import InBlockFavouriteIcon from "../icons/inBlockFavouriteIcon.tsx"
 import InBlockIsFavouriteIcon from "../icons/inBlockIsFavouriteIcon.tsx"
 
@@ -12,7 +12,7 @@ interface ChildProps {
   resourceId: number
   resourceType: resourceType
   isFavourite?: boolean
-  onFavouriteChange?: () => void
+  onFavouriteChange?: (resourceType: resourceType, resourceId: number, newStatus: boolean) => void
 }
 
 
@@ -93,7 +93,7 @@ const ChildComponent: FC<ChildProps> = (props) => {
     } else {
       window.ipcRenderer.send("insert-favourite", props.resourceType, props.resourceId)
     }
-    props.onFavouriteChange && props.onFavouriteChange()
+    props.onFavouriteChange && props.onFavouriteChange(props.resourceType, props.resourceId, !props.isFavourite)
   }
 
 

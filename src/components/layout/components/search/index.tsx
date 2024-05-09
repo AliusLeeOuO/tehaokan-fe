@@ -16,7 +16,7 @@ export default function Search() {
 
   // 定义不显示搜索的路由列表
   const location = useLocation()
-  const hiddenRoutes = ["/settings", "/favourites", "/history"]
+  const hiddenRoutes = ["/settings", "/favourites", "/history", "/index/subscription"]
   // 检查当前路由是否在隐藏列表中
   const showSelector = !hiddenRoutes.includes(location.pathname)
 

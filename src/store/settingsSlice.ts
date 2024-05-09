@@ -6,12 +6,14 @@ interface SettingsState {
   minimizeToTray: boolean;
   confirmOnClose: boolean;
   fontFamily: string;
+  autoPlay: boolean;
 }
 
 const initialState: SettingsState = {
   minimizeToTray: true,
   confirmOnClose: true,
-  fontFamily: "HarmonyOS Sans"
+  fontFamily: "HarmonyOS Sans",
+  autoPlay: false
 }
 
 export const settingsSlice = createSlice({
@@ -26,10 +28,18 @@ export const settingsSlice = createSlice({
     },
     setFontFamily: (state, action: PayloadAction<string>) => {
       state.fontFamily = action.payload
+    },
+    setAutoPlay: (state, action: PayloadAction<boolean>) => {
+      state.autoPlay = action.payload
     }
   }
 })
 
-export const { setMinimizeToTray, setConfirmOnClose, setFontFamily } = settingsSlice.actions
+export const {
+  setMinimizeToTray,
+  setConfirmOnClose,
+  setFontFamily ,
+  setAutoPlay
+} = settingsSlice.actions
 
 export default settingsSlice.reducer

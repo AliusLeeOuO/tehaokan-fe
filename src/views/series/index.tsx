@@ -3,7 +3,7 @@ import usePublicApi, { seriesResponseDataContent } from "../../xhr/publicApi.ts"
 import MoviesBlock from "../../components/moviesBlock"
 import PublicLoading from "../../components/publicLoading"
 import style from "./index.module.less"
-import { FavouriteItem } from "../../../electron/db-types.ts"
+import { type FavouriteItem, type resourceType } from "../../../electron/db-types.ts"
 import { RootState } from "../../store/store.ts"
 import { useSelector } from "react-redux"
 
@@ -65,17 +65,16 @@ export default function Series() {
   }, [])
 
   // 更新收藏状态
-  const updateFavouriteStatus = async () => {
-    // 仅更新收藏状态
-    const favouriteData = await fetchFavourite()
+  const updateFavouriteStatus = async (_resourceType: resourceType, resourceId: number, newStatus: boolean) => {
+    // 仅更新收藏状态，直接修改state中的数据
     const updatedMovieList = movieList.map(item => {
-      const isFavourite = favouriteData.some(favouriteItem => {
-        return favouriteItem.resourceId === item.id
-      })
-      return {
-        ...item,
-        isFavourite: isFavourite
+      if (item.id === resourceId) {
+        return {
+          ...item,
+          isFavourite: newStatus
+        }
       }
+      return item
     })
     setMovieList(updatedMovieList)
   }
